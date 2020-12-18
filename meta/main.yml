@@ -1,0 +1,22 @@
+---
+galaxy_info:
+    author: "Ryan Speelman"
+    description: "Ansible playbook with a role to remediate a Kubernetes cluster based on the CIS_Kubernetes_Benchmark_v1.6.1"
+    company: "Refactr"
+    license: MIT
+    min_ansible_version: 2.9
+
+    platforms:
+        - name: Kubernetes Cluster
+          versions:
+              - 1.6.1
+
+    galaxy_tags:
+        - system
+        - security
+        - cis
+        - hardening
+        - kubernetes
+        - benchmark
+
+    dependencies: []

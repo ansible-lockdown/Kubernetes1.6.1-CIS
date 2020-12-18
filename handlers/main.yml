@@ -1,0 +1,4 @@
+#---
+#- name: reboot_kubernetes
+#  win_reboot:
+#      reboot_timeout: 3600

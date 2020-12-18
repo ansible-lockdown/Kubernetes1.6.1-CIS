@@ -1,0 +1,1665 @@
+---
+- name: "SCORED | 1.1.1 | PATCH | L1 | MASTER | Ensure that the API server pod specification file permissions are set to 644 or more restrictive"
+  file:
+    path: "{{ api_server_pod_specification_file }}"
+    state: file
+    mode: 0644
+  when:
+    - rule_1_1_1
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.1.1
+    - master
+
+- name: "SCORED | 1.1.2 | PATCH | L1 | MASTER | Ensure that the API server pod specification file ownership is set to root:root"
+  file:
+    path: "{{ api_server_pod_specification_file }}"
+    state: file
+    owner: root
+    group: root
+  when:
+    - rule_1_1_2
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.1.2
+    - master
+
+- name: "SCORED | 1.1.3 | PATCH | L1 | MASTER | Ensure that the controller manager pod specification file permissions are set to 644 or more restrictive"
+  file:
+    path: "{{ controller_manager_pod_specification_file }}"
+    state: file
+    mode: 0644
+  when:
+    - rule_1_1_3
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.1.3
+    - master
+
+- name: "SCORED | 1.1.4 | PATCH | L1 | MASTER | Ensure that the controller manager pod specification file ownership is set to root:root"
+  file:
+    path: "{{ controller_manager_pod_specification_file }}"
+    state: file
+    owner: root
+    group: root
+  when:
+    - rule_1_1_4
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.1.4
+    - master
+
+- name: "SCORED | 1.1.5 | PATCH | L1 | MASTER | Ensure that the scheduler pod specification file permissions are set to 644 or more restrictive"
+  file:
+    path: "{{ scheduler_pod_specification_file }}"
+    state: file
+    mode: 0644
+  when:
+    - rule_1_1_5
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.1.5
+    - master
+
+- name: "SCORED | 1.1.6 | PATCH | L1 | MASTER | Ensure that the scheduler pod specification file ownership is set to root:root"
+  file:
+    path: "{{ scheduler_pod_specification_file }}"
+    state: file
+    owner: root
+    group: root
+  when:
+    - rule_1_1_6
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.1.6
+    - master
+
+- name: "SCORED | 1.1.7 | PATCH | L1 | MASTER | Ensure that the etcd pod specification file permissions are set to 644 or more restrictive"
+  file:
+    path: "{{ etcd_pod_specification_file }}"
+    state: file
+    mode: 0644
+  when:
+    - rule_1_1_7
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.1.7
+    - master
+
+- name: "SCORED | 1.1.8 | PATCH | L1 | MASTER | Ensure that the etcd pod specification file ownership is set to root:root"
+  file:
+    path: "{{ etcd_pod_specification_file }}"
+    state: file
+    owner: root
+    group: root
+  when:
+    - rule_1_1_8
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.1.8
+    - master
+
+- name: "SCORED | 1.1.9 | PATCH | L1 | MASTER | Ensure that the Container Network Interface file permissions are set to 644 or more restrictive"
+  block:
+    - name: "1.1.9 | Find Container Network Interface files"
+      find:
+        paths: /etc/cni/net.d
+        patterns: "*.conf"
+      register: cni_files
+#    - name: DEBUG CNI file paths
+#      debug:
+#        msg: "{{ item.path }}"
+#      loop: "{{ cni_files.files }}"
+    - name: "SCORED | 1.1.9 | PATCH | L1 | MASTER | Ensure that the Container Network Interface file permissions are set to 644 or more restrictive"
+      file:
+        path: "{{ item.path }}"
+        state: file
+        mode: 0644
+      loop: "{{ cni_files.files }}"
+  when:
+    - rule_1_1_9
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.1.9
+    - master
+
+- name: "SCORED | 1.1.10 | PATCH | L1 | MASTER | Ensure that the Container Network Interface file ownership is set to root:root"
+  block:
+    - name: "1.1.10 | Find Container Network Interface files"
+      find:
+        paths: /etc/cni/net.d
+        patterns: "*.conf"
+      register: cni_files
+    - name: "SCORED | 1.1.10 | PATCH | L1 | MASTER | Ensure that the Container Network Interface file ownership is set to root:root"
+      file:
+        path: "{{ item.path }}"
+        state: file
+        owner: root
+        group: root
+      loop: "{{ cni_files.files }}"
+  when:
+    - rule_1_1_10
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.1.10
+    - master
+
+
+# On the etcd server node, get the etcd data directory, passed as an argument `--data-dir`, from the below command:
+  # ps -ef | grep etcd
+- name: "SCORED | 1.1.11 | PATCH | L1 | MASTER | Ensure that the etcd data directory permissions are set to 700 or more restrictive"
+  file:
+    path: "{{ etcd_data_directory }}"
+    state: directory
+    mode: 0700
+  when:
+    - rule_1_1_11
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.1.11
+    - master
+    - etcd
+    - followup
+
+# etcd user and group needs to be setup
+- name: "SCORED | 1.1.12 | PATCH | L1 | MASTER | Ensure that the etcd data directory ownership is set to etcd:etcd"
+  file:
+    path: "{{ etcd_data_directory }}"
+    state: directory
+    owner: etcd
+    group: etcd
+  when:
+    - rule_1_1_12
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.1.12
+    - master
+    - etcd
+    - followup
+
+- name: "SCORED | 1.1.13 | PATCH | L1 | MASTER | Ensure that the admin.conf file permissions are set to 644 or more restrictive"
+  file:
+    path: /etc/kubernetes/admin.conf
+    state: file
+    mode: 0644
+  when:
+    - rule_1_1_13
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.1.13
+    - master
+
+- name: "SCORED | 1.1.14 | PATCH | L1 | MASTER | Ensure that the admin.conf file ownership is set to root:root"
+  file:
+    path: /etc/kubernetes/admin.conf
+    state: file
+    owner: root
+    group: root
+  when:
+    - rule_1_1_14
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.1.14
+    - master
+
+- name: "SCORED | 1.1.15 | PATCH | L1 | MASTER | Ensure that the scheduler.conf file permissions are set to 644 or more restrictive"
+  file:
+    path: /etc/kubernetes/scheduler.conf
+    state: file
+    mode: 0644
+  when:
+    - rule_1_1_15
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.1.15
+    - master
+
+- name: "SCORED | 1.1.16 | PATCH | L1 | MASTER | Ensure that the scheduler.conf file ownership is set to root:root"
+  file:
+    path: /etc/kubernetes/scheduler.conf
+    state: file
+    owner: root
+    group: root
+  when:
+    - rule_1_1_16
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.1.16
+    - master
+
+- name: "SCORED | 1.1.17 | PATCH | L1 | MASTER | Ensure that the controller-manager.conf file permissions are set to 644 or more restrictive"
+  file:
+    path: /etc/kubernetes/controller-manager.conf
+    state: file
+    mode: 0644
+  when:
+    - rule_1_1_17
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.1.17
+    - master
+
+- name: "SCORED | 1.1.18 | PATCH | L1 | MASTER | Ensure that the controller-manager.conf file ownership is set to root:root"
+  file:
+    path: /etc/kubernetes/controller-manager.conf
+    state: file
+    owner: root
+    group: root
+  when:
+    - rule_1_1_18
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.1.18
+    - master
+
+- name: "SCORED | 1.1.19 | PATCH | L1 | MASTER | Ensure that the Kubernetes PKI directory and file ownership is set to root:root"
+  file:
+    path: /etc/kubernetes/pki/
+    state: directory
+    owner: root
+    group: root
+  when:
+    - rule_1_1_19
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.1.19
+    - master
+
+- name: "SCORED | 1.1.20 | PATCH | L1 | MASTER | Ensure that the Kubernetes PKI certificate file permissions are set to 644 or more restrictive"
+  file:
+    path: /etc/kubernetes/pki/
+    state: directory
+    mode: 0644
+  when:
+    - rule_1_1_20
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.1.20
+    - master
+
+
+########################################################
+#region API Server pod specification file
+########################################################
+- name: "SCORED | 1.2.1 | PATCH | L1 | MASTER | Ensure that the --anonymous-auth argument is set to false"
+  block:
+  - name: "SCORED | 1.2.1 | PATCH | L1 | MASTER | If argument '--anonymous-auth' does not exist, add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      backup: yes
+      regexp: '^(\s+- --anonymous-auth=.*)$'
+      line: "    - --anonymous-auth=false"
+      insertafter: '^\s+- kube-apiserver$'
+  - name: "SCORED | 1.2.1 | PATCH | L1 | MASTER | Ensure that the --anonymous-auth argument is set to false"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      backup: true
+      backrefs: true
+      regexp: '^(\s+- --anonymous-auth=)(?!false).*$'
+      line: '\1false'
+  when:
+    - rule_1_2_1
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.1
+    - master
+
+- name: "SCORED | 1.2.2 | PATCH | L1 | MASTER | Ensure that the --basic-auth-file argument is not set"
+  lineinfile:
+    path: "{{ api_server_pod_specification_file }}"
+    state: absent
+    backup: yes
+    regexp: '^\s+- --basic-auth-file=.*'
+  when:
+    - rule_1_2_2
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.2
+    - master
+
+- name: "SCORED | 1.2.3 | PATCH | L1 | MASTER | Ensure that the --token-auth-file parameter is not set"
+  lineinfile:
+    path: "{{ api_server_pod_specification_file }}"
+    state: absent
+    backup: yes
+    regexp: '^\s+- --token-auth-file=.*'
+  when:
+    - rule_1_2_3
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.3
+    - master
+
+- name: "SCORED | 1.2.4 | PATCH | L1 | MASTER | Ensure that the --kubelet-https argument is set to true"
+  block:
+  - name: "SCORED | 1.2.4 | PATCH | L1 | MASTER | If argument '--kubelet-https' does not exist, add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      backup: yes
+      regexp: '^(\s+- --kubelet-https=.*)$'
+      line: "    - --kubelet-https=true"
+      insertafter: '^\s+- kube-apiserver$'
+  - name: "SCORED | 1.2.4 | PATCH | L1 | MASTER | Ensure that the --kubelet-https argument is set to true"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      backup: true
+      backrefs: true
+      regexp: '^(\s+- --kubelet-https=)(?!true).*$'
+      line: '\1true'
+  when:
+    - rule_1_2_4
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.4
+    - master
+
+- name: "SCORED | 1.2.5 | PATCH | L1 | MASTER | Ensure that the --kubelet-client-certificate and --kubelet-client-key arguments are set as appropriate"
+  block:
+  - name: "SCORED | 1.2.5 | PATCH | L1 | MASTER | If argument '--kubelet-client-certificate' does not exist, add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      backup: yes
+      regexp: '^(\s+- --kubelet-client-certificate=.*)$'
+      line: "    - --kubelet-client-certificate={{ kubelet_client_certificate_path }}"
+      insertafter: '^\s+- kube-apiserver$'
+  - name: "SCORED | 1.2.5 | PATCH | L1 | MASTER | Ensure that the --kubelet-client-certificate is set to kubelet_client_certificate_path"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      backup: true
+      backrefs: true
+      regexp: '^(\s+- --kubelet-client-certificate=)(?!{{ kubelet_client_certificate_path }}).*$'
+      line: '\1{{ kubelet_client_certificate_path }}'
+  - name: "SCORED | 1.2.5 | PATCH | L1 | MASTER | If argument '--kubelet-client-key' does not exist, add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      backup: yes
+      regexp: '^(\s+- --kubelet-client-key=.*)$'
+      line: "    - --kubelet-client-key={{ kubelet_client_key_path }}"
+      insertafter: '^\s+- kube-apiserver$'
+  - name: "SCORED | 1.2.5 | PATCH | L1 | MASTER | Ensure that the --kubelet-client-key is set to kubelet_client_key_path"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      backup: true
+      backrefs: true
+      regexp: '^(\s+- --kubelet-client-key=)(?!{{ kubelet_client_key_path }}).*$'
+      line: '\1{{ kubelet_client_key_path }}'
+  when:
+    - rule_1_2_5
+  tags:
+    - level1
+    - patch
+    - rule_1.2.5
+    - master
+
+- name: "SCORED | 1.2.6 | AUDIT | L1 | MASTER | Ensure that the --kubelet-certificate-authority argument is set as appropriate"
+  block:
+  - name: "SCORED | 1.2.6 | PATCH | L1 | MASTER | If argument '--kubelet-certificate-authority' does not exist, add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      backup: yes
+      regexp: '^(\s+- --kubelet-certificate-authority=.*)$'
+      line: "    - --kubelet-certificate-authority={{ kubelet_certificate_authority_path }}"
+      insertafter: '^\s+- kube-apiserver$'
+  - name: "SCORED | 1.2.6 | PATCH | L1 | MASTER | Ensure that the --kubelet-certificate-authority is set to kubelet_certificate_authority_path"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      backup: true
+      backrefs: true
+      regexp: '^(\s+- --kubelet-certificate-authority=)(?!{{ kubelet_certificate_authority_path }}).*$'
+      line: '\1{{ kubelet_certificate_authority_path }}'
+  when:
+    - rule_1_2_6
+  tags:
+    - level1
+    - audit
+    - rule_1.2.6
+    - master
+
+#Speelman | This step assumes --authorization-mode parameter is already set
+#Speelman | Need to develop a way to manipulate the array of values for this argument
+- name: "SCORED | 1.2.7 | AUDIT | L1 | MASTER | Ensure that the --authorization-mode argument is not set to AlwaysAllow"
+  block:
+  - name: "SCORED | 1.2.7 | AUDIT | L1 | MASTER | Test if --authorization-mode=AlwaysAllow"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      regexp: '\s- --authorization-mode=AlwaysAllow$'
+      state: absent
+    check_mode: yes
+    changed_when: false
+    register: authorization_mode_equals_alwaysallow
+  - name: "SCORED | 1.2.7 | AUDIT | L1 | MASTER | Assert --authorization-mode argument is not set to AlwaysAllow"
+    assert:
+      that: not authorization_mode_equals_alwaysallow.found
+      success_msg: "'--authorization-mode' argument is set to AlwaysAllow"
+      fail_msg: "'--authorization-mode' argument is not set to AlwaysAllow"
+  when:
+    - rule_1_2_7
+  tags:
+    - level1
+    - perms
+    - audit
+    - rule_1.2.7
+    - master
+    - followup
+
+#Speelman | This step assumes --authorization-mode parameter is already set
+#Speelman | Need to develop a way to manipulate the array of values for this argument
+- name: "SCORED | 1.2.8 | AUDIT | L1 | MASTER | Ensure that the --authorization-mode argument includes Node"
+  block:
+  - name: "SCORED | 1.2.8 | AUDIT | L1 | MASTER | Test if --authorization-mode argument includes Node"
+    lineinfile:
+      dest: "{{ api_server_pod_specification_file }}"
+      backup: true
+      backrefs: true
+      state: present
+      regexp: '^(\s+- --authorization-mode=(?!.*Node).*)$'
+      line: '\1,Node'
+  when:
+    - rule_1_2_8
+  tags:
+    - level1
+    - perms
+    - audit
+    - rule_1.2.8
+    - master
+    - followup
+
+#Speelman | This step assumes --authorization-mode parameter is already set
+#Speelman | Need to develop a way to manipulate the array of values for this argument
+- name: "SCORED | 1.2.9 | PATCH | L1 | MASTER | Ensure that the --authorization-mode argument includes RBAC"
+  block:
+  - name: "SCORED | 1.2.9 | PATCH | L1 | MASTER | Test if --authorization-mode argument includes RBAC"
+    lineinfile:
+      dest: "{{ api_server_pod_specification_file }}"
+      backup: true
+      backrefs: true
+      state: present
+      regexp: '^(\s+- --authorization-mode=(?!.*RBAC).*)$'
+      line: '\1,RBAC'
+  when:
+    - rule_1_2_9
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.9
+    - master
+    - followup
+
+
+
+########################################################
+#region --enable-admission-plugins
+########################################################
+#Speelman | Do we want to write this line if it does not exist? 
+#Speelman | Do we want to add a default value (i.e. EventRateLimit)
+#Speelman | Need to develop a way to manipulate the array of values for this argument
+- name: "SCORED | 1.2.10-1.2.17 | AUDIT | L1 | MASTER | Ensure that --enable-admission-plugins argument is set"
+  block:
+  - name: "SCORED | 1.2.10-1.2.17 | AUDIT | L1 | MASTER | Test if --enable-admission-plugins argument is set"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      regexp: '\s- --enable-admission-plugins=.*'
+      state: absent
+    check_mode: yes
+    changed_when: false
+    register: enable_admission_plugins
+  - name: "SCORED | 1.2.10 | AUDIT | L1 | MASTER | Assert that admission-control-config argument is set"
+    assert:
+      that: enable_admission_plugins.found
+      success_msg: "'--enable-admission-plugins' argument is set"
+      fail_msg: "'--enable-admission-plugins' argument is not set"
+  when:
+    - rule_1_2_10 or rule_1_2_11 or rule_1_2_12 or rule_1_2_13 or rule_1_2_16 or rule_1_2_17
+  tags:
+    - level1
+    - audit
+    - rule_1.2.10
+    - rule_1.2.11
+    - rule_1.2.12
+    - rule_1.2.13
+    - rule_1.2.16
+    - rule_1.2.17
+    - master
+    - followup
+
+#Speelman | This step assumes --enable-admission-plugins is already set
+#Speelman | Need to develop a way to manipulate the array of values for this argument
+- name: "SCORED | 1.2.10 | AUDIT | L1 | MASTER | Ensure that the admission control plugin EventRateLimit is set"
+  block:
+  - name: "SCORED | 1.2.10 | AUDIT | L1 | MASTER | Ensure that the admission control plugin EventRateLimit is set"
+    lineinfile:
+      dest: "{{ api_server_pod_specification_file }}"
+      backup: true
+      backrefs: true
+      state: present
+      regexp: '^(\s+- --enable-admission-plugins=(?!.*EventRateLimit).*)$'
+      line: '\1,EventRateLimit'
+  - name: "SCORED | 1.2.10 | AUDIT | L1 | MASTER | Test if --admission-control-config-file argument is set"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      regexp: '\s- --admission-control-config-file=.*'
+      state: absent
+    check_mode: yes
+    changed_when: false
+    register: admission_control_config_file
+  - name: "SCORED | 1.2.10 | AUDIT | L1 | MASTER | Assert that admission-control-config argument is set"
+    assert:
+      that: admission_control_config_file.found
+      success_msg: "'--admission-control-config-file' argument is set"
+      fail_msg: "'--admission-control-config-file' argument is not set"
+  when:
+    - rule_1_2_10
+    - enable_admission_plugins.found
+  tags:
+    - level1
+    - perms
+    - audit
+    - rule_1.2.10
+    - master
+    - followup
+
+#Speelman | This step assumes --enable-admission-plugins is already set
+#Speelman | Need to develop a way to manipulate the array of values for this argument
+- name: "SCORED | 1.2.11 | AUDIT | L1 | MASTER | Ensure that the admission control plugin AlwaysAdmit is not set"
+  block:
+  - name: "SCORED | 1.2.11 | AUDIT | L1 | MASTER | Test if --enable-admission-plugins argument contains 'AlwaysAdmit'"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      regexp: '\s- --enable-admission-plugins=.*AlwaysAdmit.*'
+      state: absent
+    check_mode: yes
+    changed_when: false
+    register: enable_admission_plugins_contains_alwaysadmit
+    when: enable_admission_plugins.found
+  - name: "SCORED | 1.2.11 | AUDIT | L1 | MASTER | Assert that --enable-admission-plugins argument does not contain 'AlwaysAdmit'"
+    assert:
+      that: not enable_admission_plugins_contains_alwaysadmit.found
+      success_msg: "'--enable-admission-plugins' argument does not contain 'AlwaysAdmit'"
+      fail_msg: "'--enable-admission-plugins' argument contains 'AlwaysAdmit'"
+  when:
+    - rule_1_2_11
+    - enable_admission_plugins.found
+  tags:
+    - level1
+    - perms
+    - audit
+    - rule_1.2.11
+    - master
+    - followup
+
+#Speelman | This step assumes --enable-admission-plugins is already set
+#Speelman | Need to develop a way to manipulate the array of values for this argument
+- name: "SCORED | 1.2.12 | AUDIT | L1 | MASTER | Ensure that the admission control plugin AlwaysPullImages is set"
+  block:
+  - name: "SCORED | 1.2.12 | AUDIT | L1 | MASTER | Test if --enable-admission-plugins argument includes AlwaysPullImages"
+    lineinfile:
+      dest: "{{ api_server_pod_specification_file }}"
+      backup: true
+      backrefs: true
+      state: present
+      regexp: '^(\s+- --enable-admission-plugins=(?!.*AlwaysPullImages).*)$'
+      line: '\1,AlwaysPullImages'
+  when:
+    - rule_1_2_12
+    - enable_admission_plugins.found
+  tags:
+    - level1
+    - perms
+    - audit
+    - rule_1.2.12
+    - master
+    - followup
+
+#Speelman | This step assumes --enable-admission-plugins is already set
+#Speelman | Need to develop a way to manipulate the array of values for this argument
+- name: "SCORED | 1.2.13 | AUDIT | L1 | MASTER | Ensure that the admission control plugin SecurityContextDeny is set if PodSecurityPolicy is not used"
+  block:
+  - name: "SCORED | 1.2.13 | AUDIT | L1 | MASTER | Test if --enable-admission-plugins argument includes PodSecurityPolicy"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      regexp: '\s- --enable-admission-plugins=.*PodSecurityPolicy.*'
+      state: absent
+    check_mode: yes
+    changed_when: false
+    register: enable_admission_plugins_contains_podsecuritypolicy
+  - name: "SCORED | 1.2.13 | AUDIT | L1 | MASTER | Test if --enable-admission-plugins argument includes SecurityContextDeny"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      regexp: '\s- --enable-admission-plugins=.*SecurityContextDeny.*'
+      state: absent
+    check_mode: yes
+    changed_when: false
+    register: enable_admission_plugins_contains_securitycontextdeny
+  - name: "SCORED | 1.2.13 | AUDIT | L1 | MASTER | Ensure that the admission control plugin SecurityContextDeny is set"
+    lineinfile:
+      dest: "{{ api_server_pod_specification_file }}"
+      backup: true
+      backrefs: true
+      state: present
+      regexp: '^(\s+- --enable-admission-plugins=(?!.*PodSecurityPolicy).*)$'
+      line: '\1,PodSecurityPolicy'
+    when: not enable_admission_plugins_contains_podsecuritypolicy.found
+  when:
+    - rule_1_2_13
+    - enable_admission_plugins.found
+  tags:
+    - level1
+    - perms
+    - audit
+    - rule_1.2.13
+    - master
+    - followup
+
+
+
+
+########################################################
+#region --disable-admission-plugins
+########################################################
+- name: "SCORED | 1.2.14-15 | AUDIT | L1 | MASTER | Discover if --disable-admission-plugins argument is set"
+  block:
+  - name: "SCORED | 1.2.14-15 | PATCH | L1 | MASTER | Test that --disable-admission-plugins argument is set"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      regexp: '^(\s+- --disable-admission-plugins=.*)$'
+      state: absent
+    check_mode: yes
+    changed_when: false
+    register: disable_admission_plugins
+  when:
+    - rule_1_2_14 or rule_1_2_15
+  tags:
+    - level1
+    - audit
+    - rule_1.2.14
+    - rule_1.2.15
+    - master
+
+- name: "SCORED | 1.2.14 | AUDIT | L1 | MASTER | Ensure that the admission control plugin ServiceAccount is set"
+  block:
+  - name: "SCORED | 1.2.14 | AUDIT | L1 | MASTER | Assert that when --disable-admission-plugins argument is not set, therefore it does not contain 'ServiceAccount'"
+    assert:
+      that: not disable_admission_plugins.found
+      success_msg: "'--disable-admission-plugins' argument is not set, therefore it does not contain 'ServiceAccount'"
+    when: not disable_admission_plugins.found
+  - name: "SCORED | 1.2.14 | AUDIT | L1 | MASTER | Test if --disable-admission-plugins argument contains 'ServiceAccount'"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      regexp: '^\s+- --disable-admission-plugins=.*ServiceAccount.*$'
+      state: absent
+    check_mode: yes
+    changed_when: false
+    register: disable_admission_plugins_contains_serviceaccount
+    when: disable_admission_plugins.found
+  - name: "SCORED | 1.2.14 | AUDIT | L1 | MASTER | Assert that --disable-admission-plugins argument does not contain 'ServiceAccount'"
+    assert:
+      that: not disable_admission_plugins_contains_serviceaccount.found
+      success_msg: "'--disable-admission-plugins' argument does not contain 'ServiceAccount'"
+      fail_msg: "'--disable-admission-plugins' argument contains 'ServiceAccount'"
+    when: disable_admission_plugins.found
+  when:
+    - rule_1_2_14
+  tags:
+    - level1
+    - perms
+    - audit
+    - rule_1.2.14
+    - master
+
+- name: "SCORED | 1.2.15 | AUDIT | L1 | MASTER | Ensure that the admission control plugin NamespaceLifecycle is set"
+  block:
+  - name: "SCORED | 1.2.15 | AUDIT | L1 | MASTER | Assert that when --disable-admission-plugins argument is not set, therefore it does not contain 'NamespaceLifecycle'"
+    assert:
+      that: not disable_admission_plugins.found
+      success_msg: "'--disable-admission-plugins' argument is not set, therefore it does not contain 'NamespaceLifecycle'"
+    when: not disable_admission_plugins.found
+  - name: "SCORED | 1.2.15 | AUDIT | L1 | MASTER | Test if --disable-admission-plugins argument contains 'NamespaceLifecycle'"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      regexp: '^\s+- --disable-admission-plugins=.*NamespaceLifecycle.*$'
+      state: absent
+    check_mode: yes
+    changed_when: false
+    register: disable_admission_plugins_contains_namespacelifecycle
+    when: disable_admission_plugins.found
+  - name: "SCORED | 1.2.15 | AUDIT | L1 | MASTER | Assert that --disable-admission-plugins argument does not contain 'NamespaceLifecycle'"
+    assert:
+      that: not disable_admission_plugins_contains_namespacelifecycle.found
+      success_msg: "'--disable-admission-plugins' argument does not contain 'NamespaceLifecycle'"
+      fail_msg: "'--disable-admission-plugins' argument contains 'NamespaceLifecycle'"
+    when: disable_admission_plugins.found
+  when:
+    - rule_1_2_15
+  tags:
+    - level1
+    - perms
+    - audit
+    - rule_1.2.15
+    - master
+########################################################
+#endregion --disable-admission-plugins
+########################################################
+
+#Speelman | This step assumes --enable-admission-plugins is already set
+#Speelman | Need to develop a way to manipulate the array of values for this argument
+- name: "SCORED | 1.2.16 | AUDIT | L1 | MASTER | Ensure that the admission control plugin PodSecurityPolicy is set"
+  block:
+  - name: "SCORED | 1.2.16 | AUDIT | L1 | MASTER | Test if --enable-admission-plugins argument includes PodSecurityPolicy"
+    lineinfile:
+      dest: "{{ api_server_pod_specification_file }}"
+      backup: true
+      backrefs: true
+      state: present
+      regexp: '^(\s+- --enable-admission-plugins=(?!.*PodSecurityPolicy).*)$'
+      line: '\1,PodSecurityPolicy'
+  when:
+    - rule_1_2_16
+    - enable_admission_plugins.found
+  tags:
+    - level1
+    - perms
+    - audit
+    - rule_1.2.16
+    - master
+    - followup
+
+
+#Speelman | This step assumes --enable-admission-plugins is already set
+#Speelman | Need to develop a way to manipulate the array of values for this argument
+- name: "SCORED | 1.2.17 | AUDIT | L1 | MASTER | Ensure that the admission control plugin NodeRestriction is set"
+  block:
+  - name: "SCORED | 1.2.17 | AUDIT | L1 | MASTER | Test if --enable-admission-plugins argument includes NodeRestriction"
+    lineinfile:
+      dest: "{{ api_server_pod_specification_file }}"
+      backup: true
+      backrefs: true
+      state: present
+      regexp: '^(\s+- --enable-admission-plugins=(?!.*NodeRestriction).*)$'
+      line: '\1,NodeRestriction'
+  when:
+    - rule_1_2_17
+    - enable_admission_plugins.found
+  tags:
+    - level1
+    - perms
+    - audit
+    - rule_1.2.17
+    - master
+    - followup
+########################################################
+#endregion --enable-admission-plugins
+########################################################
+
+
+- name: "SCORED | 1.2.18 | PATCH | L1 | MASTER | Ensure that the --insecure-bind-address argument is not set"
+  lineinfile:
+    path: "{{ api_server_pod_specification_file }}"
+    state: absent
+    backup: yes
+    regexp: '^\s+- --insecure-bind-address=.*'
+  when:
+    - rule_1_2_18
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.18
+    - master
+
+#Speelman | Works, but having issue with joining group one (\1) followed by a literal number
+- name: "SCORED | 1.2.19 | PATCH | L1 | MASTER | Ensure that the --insecure-port argument is set to {{ insecure_port }}"
+  block:
+  - name: "SCORED | 1.2.19 | PATCH | L1 | MASTER | If argument '--insecure-port' does not exist, add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --insecure-port=).*$'
+      line: '    - --insecure-port={{ insecure_port }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backup: yes
+  - name: "SCORED | 1.2.19 | PATCH | L1 | MASTER | Ensure that the --insecure-port argument is set to {{ insecure_port }}"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --insecure-port=)(?!{{ insecure_port }}).*$'
+      line: '    - --insecure-port={{ insecure_port }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_2_19
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.19
+    - master
+    - followup
+
+#Speelman | Works, but having issue with combining group one (\1) followed by a literal number
+- name: "SCORED | 1.2.20 | PATCH | L1 | MASTER | Ensure that the --secure-port argument is not set to {{ secure_port }}"
+  block:
+  - name: "SCORED | 1.2.20 | PATCH | L1 | MASTER | If argument '--secure-port' does not exist, add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --secure-port=).*$'
+      line: '    - --secure-port={{ secure_port }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backup: yes
+  - name: "SCORED | 1.2.20 | PATCH | L1 | MASTER | Ensure that the --secure-port argument is not set to {{ secure_port }}"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --secure-port=)(?!{{ secure_port }}).*$'
+      line: '    - --secure-port={{ secure_port }}'
+      #Issues with these variations:
+      #line: '\1{{ secure_port }}'
+      #line: '\{1}8443'
+      #line: '\1`8443'
+      #line: '\1\84430'
+      #line: '\1{8443}'
+      #line: '${1}1234'
+      #line: '\1(?P=car)'
+      insertafter: '^\s+- kube-apiserver$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_2_20
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.20
+    - master
+    - followup
+
+
+- name: "SCORED | 1.2.21 | PATCH | L1 | MASTER | Ensure that the --profiling argument is set to false"
+  block:
+  - name: "SCORED | 1.2.21 | PATCH | L1 | MASTER | If argument '--profiling does not exist', add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --profiling=).*$'
+      line: '    - --profiling=false'
+      insertafter: '^\s+- kube-apiserver$'
+      backup: yes
+  - name: "SCORED | 1.2.21 | PATCH | L1 | MASTER | Ensure that the --profiling argument is set to false"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --profiling=)(?!false).*$'
+      line: '\1false'
+      insertafter: '^\s+- kube-apiserver$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_2_21
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.21
+    - master
+
+- name: "SCORED | 1.2.22 | PATCH | L1 | MASTER | Ensure that the --audit-log-path argument is set"
+  block:
+  - name: "SCORED | 1.2.22 | PATCH | L1 | MASTER | If argument '--audit-log-path' does not exist, add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --audit-log-path=).*$'
+      line: '    - --audit-log-path={{ audit_log_path }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backup: yes
+  - name: "SCORED | 1.2.22 | PATCH | L1 | MASTER | Ensure that the --audit-log-path argument is set"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --audit-log-path=)(?!{{ audit_log_path }}).*$'
+      line: '\1{{ audit_log_path }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_2_22
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.22
+    - master
+
+- name: "SCORED | 1.2.23 | PATCH | L1 | MASTER | Ensure that the --audit-log-maxage argument is set to 30 or as appropriate"
+  block:
+  - name: "SCORED | 1.2.23 | PATCH | L1 | MASTER | If argument '--audit-log-maxage' does not exist, add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --audit-log-maxage=).*$'
+      line: '    - --audit-log-maxage={{ audit_log_maxage }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backup: yes
+  - name: "SCORED | 1.2.23 | PATCH | L1 | MASTER | Ensure that the --audit-log-maxage argument is set to 30 or as appropriate"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --audit-log-maxage=)(?!{{ audit_log_maxage }}).*$'
+      line: '\1{{ audit_log_maxage }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_2_23
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.23 
+    - master
+
+
+- name: "SCORED | 1.2.24 | PATCH | L1 | MASTER | Ensure that the --audit-log-maxbackup argument is set to 10 or as appropriate"
+  block:
+  - name: "SCORED | 1.2.24 | PATCH | L1 | MASTER | If argument '--audit-log-maxbackup' does not exist, add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --audit-log-maxbackup=).*$'
+      line: '    - --audit-log-maxbackup={{ audit_log_maxbackup }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backup: yes
+  - name: "SCORED | 1.2.24 | PATCH | L1 | MASTER | Ensure that the --audit-log-maxbackup argument is set to 10 or as appropriate"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --audit-log-maxbackup=)(?!{{ audit_log_maxbackup }}).*$'
+      line: '\1{{ audit_log_maxbackup }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_2_24
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.24
+    - master
+
+- name: "SCORED | 1.2.25 | PATCH | L1 | MASTER | Ensure that the --audit-log-maxsize argument is set to 100 or as appropriate"
+  block:
+  - name: "SCORED | 1.2.25 | PATCH | L1 | MASTER | If argument '--audit-log-maxsize' does not exist, add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --audit-log-maxsize=).*$'
+      line: '    - --audit-log-maxsize={{ audit_log_maxsize }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backup: yes
+  - name: "SCORED | 1.2.25 | PATCH | L1 | MASTER | Ensure that the --audit-log-maxsize argument is set to 100 or as appropriate"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --audit-log-maxsize=)(?!{{ audit_log_maxsize }}).*$'
+      line: '\1{{ audit_log_maxsize }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_2_25
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.25
+    - master
+
+- name: "SCORED | 1.2.26 | PATCH | L1 | MASTER | Ensure that the --request-timeout argument is set as appropriate"
+  block:
+  - name: "SCORED | 1.2.26 | PATCH | L1 | MASTER | If argument '--request-timeout' does not exist, add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --request-timeout=).*$'
+      line: '    - --request-timeout={{ request_timeout }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backup: yes
+  - name: "SCORED | 1.2.26 | PATCH | L1 | MASTER | Ensure that the --request-timeout argument is set as appropriate"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --request-timeout=)(?!{{ request_timeout }}).*$'
+      line: '\1{{ request_timeout }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_2_26
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.26
+    - master
+
+
+- name: "SCORED | 1.2.27 | PATCH | L1 | MASTER | Ensure that the --service-account-lookup argument is set to true"
+  block:
+  - name: "SCORED | 1.2.27 | PATCH | L1 | MASTER | If argument '--service-account-lookup' does not exist, add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --service-account-lookup=).*$'
+      line: '    - --service-account-lookup=true'
+      insertafter: '^\s+- kube-apiserver$'
+      backup: yes
+  - name: "SCORED | 1.2.27 | PATCH | L1 | MASTER | Ensure that the --service-account-lookup argument is set to true"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --service-account-lookup=)(?!true).*$'
+      line: '\1true'
+      insertafter: '^\s+- kube-apiserver$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_2_27
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.27
+    - master
+
+
+- name: "SCORED | 1.2.28 | PATCH | L1 | MASTER | Ensure that the --service-account-key-file argument is set as appropriate"
+  block:
+  - name: "SCORED | 1.2.28 | PATCH | L1 | MASTER | If argument '--service-account-key-file' does not exist, add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --service-account-key-file=).*$'
+      line: '    - --service-account-key-file={{ service_account_key_file }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backup: yes
+  - name: "SCORED | 1.2.28 | PATCH | L1 | MASTER | Ensure that the --service-account-key-file argument is set to true"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --service-account-key-file=)(?!{{ service_account_key_file }}).*$'
+      line: '\1{{ service_account_key_file }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_2_28
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.28
+    - master
+
+- name: "SCORED | 1.2.29 | PATCH | L1 | MASTER | Ensure that the --etcd-certfile and --etcd-keyfile arguments are set as appropriate"
+  block:
+  - name: "SCORED | 1.2.29 | PATCH | L1 | MASTER | If argument '--etcd-certfile' does not exist, add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --etcd-certfile=).*$'
+      line: '    - --etcd-certfile={{ etcd_certfile }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backup: yes
+  - name: "SCORED | 1.2.29 | PATCH | L1 | MASTER | Ensure that the --etcd-certfile arguments is set as appropriate"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --etcd-certfile=)(?!{{ etcd_certfile }}).*$'
+      line: '\1{{ etcd_certfile }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backrefs: true
+      backup: yes
+  - name: "SCORED | 1.2.29 | PATCH | L1 | MASTER | If argument '--etcd-keyfile' does not exist, add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --etcd-keyfile=).*$'
+      line: '    - --etcd-keyfile={{ etcd_keyfile }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backup: yes
+  - name: "SCORED | 1.2.29 | PATCH | L1 | MASTER | Ensure that the --etcd-keyfile arguments is set as appropriate"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --etcd-keyfile=)(?!{{ etcd_keyfile }}).*$'
+      line: '\1{{ etcd_keyfile }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_2_29
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.29
+    - master
+
+- name: "SCORED | 1.2.30 | PATCH | L1 | MASTER | Ensure that the --tls-cert-file and --tls-private-key-file arguments are set as appropriate"
+  block:
+  - name: "SCORED | 1.2.30 | PATCH | L1 | MASTER | If argument '--tls-cert-file' does not exist, add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --tls-cert-file=).*$'
+      line: '    - --tls-cert-file={{ tls_cert_file }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backup: yes
+  - name: "SCORED | 1.2.30 | PATCH | L1 | MASTER | Ensure that the --tls-cert-file arguments is set as appropriate"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --tls-cert-file=)(?!{{ tls_cert_file }}).*$'
+      line: '\1{{ tls_cert_file }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backrefs: true
+      backup: yes
+  - name: "SCORED | 1.2.30 | PATCH | L1 | MASTER | If argument '--tls-private-key-file' does not exist, add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --tls-private-key-file=).*$'
+      line: '    - --tls-private-key-file={{ tls_private_key_file }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backup: yes
+  - name: "SCORED | 1.2.30 | PATCH | L1 | MASTER | Ensure that the --tls-private-key-file arguments is set as appropriate"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --tls-private-key-file=)(?!{{ tls_private_key_file }}).*$'
+      line: '\1{{ tls_private_key_file }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_2_30
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.30
+    - master
+
+- name: "SCORED | 1.2.31 | PATCH | L1 | MASTER | Ensure that the --client-ca-file argument is set as appropriate"
+  block:
+  - name: "SCORED | 1.2.31 | PATCH | L1 | MASTER | If argument '--client-ca-file' does not exist, add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --client-ca-file=).*$'
+      line: '    - --client-ca-file={{ client_ca_file }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backup: yes
+  - name: "SCORED | 1.2.31 | PATCH | L1 | MASTER | Ensure that the --client-ca-file argument is set as appropriate"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --client-ca-file=)(?!{{ client_ca_file }}).*$'
+      line: '\1{{ client_ca_file }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_2_31
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.31
+    - master
+
+
+- name: "SCORED | 1.2.32 | PATCH | L1 | MASTER | Ensure that the --etcd-cafile argument is set as appropriate"
+  block:
+  - name: "SCORED | 1.2.32 | PATCH | L1 | MASTER | If argument '--etcd-cafile' does not exist, add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --etcd-cafile=).*$'
+      line: '    - --etcd-cafile={{ etcd_cafile }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backup: yes
+  - name: "SCORED | 1.2.32 | PATCH | L1 | MASTER | Ensure that the --etcd-cafile argument is set as appropriate"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --etcd-cafile=)(?!{{ etcd_cafile }}).*$'
+      line: '\1{{ etcd_cafile }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_2_32
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.32
+    - master
+
+
+- name: "SCORED | 1.2.33 | PATCH | L1 | MASTER | Ensure that the --encryption-provider-config argument is set as appropriate"
+  block:
+  - name: "SCORED | 1.2.33 | PATCH | L1 | MASTER | If argument '--encryption-provider-config' does not exist, add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --encryption-provider-config=).*$'
+      line: '    - --encryption-provider-config={{ encryption_provider_config }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backup: yes
+  - name: "SCORED | 1.2.33 | PATCH | L1 | MASTER | Ensure that the --encryption-provider-config argument is set as appropriate"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --encryption-provider-config=)(?!{{ encryption_provider_config }}).*$'
+      line: '\1{{ encryption_provider_config }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_2_33
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.33
+    - master
+
+
+- name: "SCORED | 1.2.34 | PATCH | L1 | MASTER | Ensure that encryption providers are appropriately configured"
+  copy:
+    dest: "{{ encryption_provider_config }}"
+    content: "{{ encryption_provider_config_file_content }}"
+  when:
+    - rule_1_2_34
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.34
+    - master
+
+
+- name: "SCORED | 1.2.35 | PATCH | L1 | MASTER | Ensure that the --tls-cipher-suites argument is set as appropriate"
+  block:
+  - name: "SCORED | 1.2.35 | PATCH | L1 | MASTER | If argument '--tls-cipher-suites' does not exist, add it"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --tls-cipher-suites=).*$'
+      line: '    - --tls-cipher-suites={{ tls_cipher_suites }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backup: yes
+  - name: "SCORED | 1.2.35 | PATCH | L1 | MASTER | Ensure that the --tls-cipher-suites argument is set as appropriate"
+    lineinfile:
+      path: "{{ api_server_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --tls-cipher-suites=)(?!{{ tls_cipher_suites }}).*$'
+      line: '\1{{ tls_cipher_suites }}'
+      insertafter: '^\s+- kube-apiserver$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_2_35
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.2.35
+    - master
+########################################################
+#endregion API Server pod specification file
+########################################################
+
+
+
+
+########################################################
+#region Controller Manager pod specification file
+########################################################
+#Speelman | Works, but having issue with joining group one (\1) followed by a literal number
+- name: "SCORED | 1.3.1 | PATCH | L1 | MASTER | Ensure that the --terminated-pod-gc-threshold argument is set as appropriate"
+  block:
+  - name: "SCORED | 1.3.1 | PATCH | L1 | MASTER | If argument '--terminated-pod-gc-threshold' does not exist, add it"
+    lineinfile:
+      path: "{{ controller_manager_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --terminated-pod-gc-threshold=).*$'
+      line: '    - --terminated-pod-gc-threshold={{ terminated_pod_gc_threshold }}'
+      insertafter: '^\s+- kube-controller-manager$'
+      backup: yes
+  - name: "SCORED | 1.3.1 | PATCH | L1 | MASTER | Ensure that the --terminated-pod-gc-threshold argument is set as appropriate"
+    lineinfile:
+      path: "{{ controller_manager_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --terminated-pod-gc-threshold=)(?!{{ terminated_pod_gc_threshold }}).*$'
+      line: '    - --terminated-pod-gc-threshold={{ terminated_pod_gc_threshold }}'
+      insertafter: '^\s+- kube-controller-manager$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_3_1
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.3.1
+    - master
+    - followup
+
+
+- name: "SCORED | 1.3.2 | PATCH | L1 | MASTER | Ensure that the --profiling argument is set to false"
+  block:
+  - name: "SCORED | 1.3.2 | PATCH | L1 | MASTER | If argument '--profiling' does not exist, add it"
+    lineinfile:
+      path: "{{ controller_manager_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --profiling=).*$'
+      line: '    - --profiling={{ controller_manager_profiling }}'
+      insertafter: '^\s+- kube-controller-manager$'
+      backup: yes
+  - name: "SCORED | 1.3.2 | PATCH | L1 | MASTER | Ensure that the --profiling argument is set to false"
+    lineinfile:
+      path: "{{ controller_manager_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --profiling=)(?!{{ controller_manager_profiling }}).*$'
+      line: '    - --profiling={{ controller_manager_profiling }}'
+      insertafter: '^\s+- kube-controller-manager$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_3_2
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.3.2
+    - master
+
+
+- name: "SCORED | 1.3.3 | PATCH | L1 | MASTER | Ensure that the --use-service-account-credentials argument is set to true"
+  block:
+  - name: "SCORED | 1.3.3 | PATCH | L1 | MASTER | If argument '--use-service-account-credentials' does not exist, add it"
+    lineinfile:
+      path: "{{ controller_manager_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --use-service-account-credentials=).*$'
+      line: '    - --use-service-account-credentials={{ use_service_account_credentials }}'
+      insertafter: '^\s+- kube-controller-manager$'
+      backup: yes
+  - name: "SCORED | 1.3.3 | PATCH | L1 | MASTER | Ensure that the --use-service-account-credentials argument is set to true"
+    lineinfile:
+      path: "{{ controller_manager_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --use-service-account-credentials=)(?!{{ use_service_account_credentials }}).*$'
+      line: '    - --use-service-account-credentials={{ use_service_account_credentials }}'
+      insertafter: '^\s+- kube-controller-manager$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_3_3
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.3.3
+    - master
+
+
+- name: "SCORED | 1.3.4 | PATCH | L1 | MASTER | Ensure that the --service-account-private-key-file  argument is set as appropriate"
+  block:
+  - name: "SCORED | 1.3.4 | PATCH | L1 | MASTER | If argument '--service-account-private-key-file' does not exist, add it"
+    lineinfile:
+      path: "{{ controller_manager_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --service-account-private-key-file=).*$'
+      line: '    - --service-account-private-key-file={{ service_account_private_key_file }}'
+      insertafter: '^\s+- kube-controller-manager$'
+      backup: yes
+  - name: "SCORED | 1.3.4 | PATCH | L1 | MASTER | Ensure that the --service-account-private-key-file  argument is set as appropriate"
+    lineinfile:
+      path: "{{ controller_manager_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --service-account-private-key-file=)(?!{{ service_account_private_key_file }}).*$'
+      line: '    - --service-account-private-key-file={{ service_account_private_key_file }}'
+      insertafter: '^\s+- kube-controller-manager$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_3_4
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.3.4
+    - master
+
+
+- name: "SCORED | 1.3.5 | PATCH | L1 | MASTER | Ensure that the --root-ca-file argument is set as appropriate"
+  block:
+  - name: "SCORED | 1.3.5 | PATCH | L1 | MASTER | If argument '--root-ca-file' does not exist, add it"
+    lineinfile:
+      path: "{{ controller_manager_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --root-ca-file=).*$'
+      line: '    - --root-ca-file={{ root_ca_file }}'
+      insertafter: '^\s+- kube-controller-manager$'
+      backup: yes
+  - name: "SCORED | 1.3.5 | PATCH | L1 | MASTER | Ensure that the --root-ca-file argument is set as appropriate"
+    lineinfile:
+      path: "{{ controller_manager_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --root-ca-file=)(?!{{ root_ca_file }}).*$'
+      line: '    - --root-ca-file={{ root_ca_file }}'
+      insertafter: '^\s+- kube-controller-manager$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_3_5
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.3.5
+    - master
+
+#This one accepts an array of key-value pairs...need to write something custom to account for existing values or just set the values
+# in the feature_gates variable
+- name: "SCORED | 1.3.6 | PATCH | L2 | MASTER | Ensure that the RotateKubeletServerCertificate argument is set to true"
+  block:
+  - name: "SCORED | 1.3.6 | PATCH | L2 | MASTER | If argument '--feature-gates' does not exist, add it"
+    lineinfile:
+      path: "{{ controller_manager_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --feature-gates=).*$'
+      line: '    - --feature-gates={{ feature_gates }}'
+      insertafter: '^\s+- kube-controller-manager$'
+      backup: yes
+  - name: "SCORED | 1.3.6 | PATCH | L2 | MASTER | Ensure that the RotateKubeletServerCertificate argument is set to true"
+    lineinfile:
+      path: "{{ controller_manager_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --feature-gates=)(?!{{ feature_gates }}).*$'
+      line: '    - --feature-gates={{ feature_gates }}'
+      insertafter: '^\s+- kube-controller-manager$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_3_6
+  tags:
+    - level2
+    - perms
+    - patch
+    - rule_1.3.6
+    - master
+    - followup
+
+
+- name: "SCORED | 1.3.7 | PATCH | L1 | MASTER | Ensure that the --bind-address argument is set to {{ controller_manager_bind_address }}"
+  block:
+  - name: "SCORED | 1.3.7 | PATCH | L1 | MASTER | If argument '--bind-address' does not exist, add it"
+    lineinfile:
+      path: "{{ controller_manager_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --bind-address=).*$'
+      line: '    - --bind-address={{ controller_manager_bind_address }}'
+      insertafter: '^\s+- kube-controller-manager$'
+      backup: yes
+  - name: "SCORED | 1.3.7 | PATCH | L1 | MASTER | Ensure that the --bind-address argument is set to {{ controller_manager_bind_address }}"
+    lineinfile:
+      path: "{{ controller_manager_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --bind-address=)(?!{{ controller_manager_bind_address }}).*$'
+      line: '    - --bind-address={{ controller_manager_bind_address }}'
+      insertafter: '^\s+- kube-controller-manager$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_3_7
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.3.7
+    - master
+########################################################
+#endregion Controller Manager pod specification file
+########################################################
+
+
+
+
+########################################################
+#region Scheduler pod specification file
+########################################################
+- name: "SCORED | 1.4.1 | PATCH | L1 | MASTER | Ensure that the --profiling argument is set to {{ scheduler_profiling }}"
+  block:
+  - name: "SCORED | 1.4.1 | PATCH | L1 | MASTER | If argument '--profiling' argument does not exist, add it"
+    lineinfile:
+      path: "{{ scheduler_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --profiling=).*$'
+      line: '    - --profiling={{ scheduler_profiling }}'
+      insertafter: '^\s+- kube-scheduler$'
+      backup: yes
+  - name: "SCORED | 1.4.1 | PATCH | L1 | MASTER | Ensure that the --profiling argument is set to {{ scheduler_profiling }}"
+    lineinfile:
+      path: "{{ scheduler_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --profiling=)(?!{{ scheduler_profiling }}).*$'
+      line: '    - --profiling={{ scheduler_profiling }}'
+      insertafter: '^\s+- kube-scheduler$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_4_1
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.4.1
+    - master
+
+
+- name: "SCORED | 1.4.2 | PATCH | L1 | MASTER | Ensure that the --bind-address argument is set to {{ scheduler_bind_address }}"
+  block:
+  - name: "SCORED | 1.4.2 | PATCH | L1 | MASTER | If argument '--bind-address' argument does not exist, add it"
+    lineinfile:
+      path: "{{ scheduler_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --bind-address=).*$'
+      line: '    - --bind-address={{ scheduler_bind_address }}'
+      insertafter: '^\s+- kube-scheduler$'
+      backup: yes
+  - name: "SCORED | 1.4.2 | PATCH | L1 | MASTER | Ensure that the --bind-address argument is set to {{ scheduler_bind_address }}"
+    lineinfile:
+      path: "{{ scheduler_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --bind-address=)(?!{{ scheduler_bind_address }}).*$'
+      line: '    - --bind-address={{ scheduler_bind_address }}'
+      insertafter: '^\s+- kube-scheduler$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_1_4_2
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_1.4.2
+    - master
+########################################################
+#endregion Scheduler pod specification file
+########################################################
