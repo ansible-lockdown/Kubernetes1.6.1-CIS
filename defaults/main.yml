@@ -1,0 +1,259 @@
+---
+section1_patch: yes
+section2_patch: yes
+section3_patch: yes
+section4_patch: yes
+section5_patch: yes
+
+min_ansible_version: "2.9"
+
+# We've defined complexity-high to mean that we cannot automatically remediate
+# the rule in question.  In the future this might mean that the remediation
+# may fail in some cases.
+complexity_high: no
+
+# Show "changed" for complex items not remediated per complexity-high setting
+# to make them stand out.  "changed" items on a second run of the role would
+# indicate items requiring manual review.
+audit_complex: yes
+
+# We've defined disruption-high to indicate items that are likely to cause
+# disruption in a normal workflow.  These items can be remediated automatically
+# but are disabled by default to avoid disruption.
+disruption_high: no
+
+# Show "changed" for disruptive items not remediated per disruption-high
+# setting to make them stand out.
+audit_disruptive: yes
+
+skip_for_travis: false
+
+workaround_for_disa_benchmark: true
+workaround_for_ssg_benchmark: true
+
+# tweak role to run in a non-privileged container
+system_is_container: no
+
+#set to false to skip tasks that either have not been developed or cannot be automated
+is_implemented: false
+
+#set to false to skip long running tasks
+long_running: false
+
+
+# These variables correspond with the CIS IDs defined in the CIS and allows you to enable/disable specific rules.
+# PLEASE NOTE: These work in coordination with the cat1, cat2, cat3 group variables. You must enable an entire group
+# in order for the variables below to take effect.
+
+# 121 total
+#### SECTION 1 ####
+  #LEVEL 1 | MASTER
+rule_1_1_1: true
+rule_1_1_2: true
+rule_1_1_3: true
+rule_1_1_4: true
+rule_1_1_5: true
+rule_1_1_6: true
+rule_1_1_7: true
+rule_1_1_8: true
+rule_1_1_9: true
+rule_1_1_10: true
+rule_1_1_11: true
+rule_1_1_12: false # etcd user and group needs to be setup
+rule_1_1_13: true
+rule_1_1_14: true
+rule_1_1_15: true
+rule_1_1_16: true
+rule_1_1_17: true
+rule_1_1_18: true
+rule_1_1_19: true
+rule_1_1_20: true
+rule_1_2_1: true
+rule_1_2_2: true
+rule_1_2_3: true
+rule_1_2_4: true
+rule_1_2_5: true
+rule_1_2_6: true
+rule_1_2_7: true
+rule_1_2_8: true
+rule_1_2_9: true
+rule_1_2_10: true
+rule_1_2_11: true
+rule_1_2_12: true
+rule_1_2_13: true
+rule_1_2_14: true
+rule_1_2_15: true
+rule_1_2_16: true
+rule_1_2_17: true
+rule_1_2_18: true
+rule_1_2_19: true
+rule_1_2_20: true
+rule_1_2_21: true
+rule_1_2_22: true
+rule_1_2_23: true
+rule_1_2_24: true
+rule_1_2_25: true
+rule_1_2_26: true
+rule_1_2_27: true
+rule_1_2_28: true
+rule_1_2_29: true
+rule_1_2_30: true
+rule_1_2_31: true
+rule_1_2_32: true
+rule_1_2_33: true
+rule_1_2_34: false # Need to define the file content
+rule_1_2_35: true
+rule_1_3_1: true
+rule_1_3_2: true
+rule_1_3_3: true
+rule_1_3_4: true
+rule_1_3_5: true
+rule_1_3_7: true
+rule_1_4_1: true
+rule_1_4_2: true
+  #LEVEL 2 | MASTER
+rule_1_3_6: true
+
+#### SECTION2 ####
+  #LEVEL 1 | MASTER
+rule_2_1: true
+rule_2_2: true
+rule_2_3: true
+rule_2_4: true
+rule_2_5: true
+rule_2_6: true
+  #LEVEL 2 | MASTER
+rule_2_7: true
+
+#### SECTION3 ####
+  #LEVEL 1 | MASTER
+rule_3_1_1: true
+rule_3_1_2: true
+  #LEVEL 2 | MASTER
+rule_3_2_2: true
+
+
+#### SECTION4 ####
+  #LEVEL 1 | WORKER
+rule_4_1_1: true
+rule_4_1_2: true
+rule_4_1_3: true
+rule_4_1_4: true
+rule_4_1_5: true
+rule_4_1_6: true
+rule_4_1_7: true
+rule_4_1_8: true
+rule_4_1_9: true
+rule_4_1_10: true
+rule_4_2_1: true
+rule_4_2_2: true
+rule_4_2_3: true
+rule_4_2_4: true
+rule_4_2_5: true
+rule_4_2_6: true
+rule_4_2_7: true
+rule_4_2_8: true
+rule_4_2_10: true
+rule_4_2_11: true
+rule_4_2_12: true
+rule_4_2_13: true
+  #LEVEL 2 | WORKER
+rule_4_2_9: true
+
+#### SECTION5 ####
+  #LEVEL 1 | MASTER
+rule_5_1_1: true
+rule_5_1_2: true
+rule_5_1_4: true
+rule_5_1_5: true
+rule_5_1_6: true
+rule_5_2_1: true
+rule_5_2_2: true
+rule_5_2_3: true
+rule_5_2_4: true
+rule_5_2_5: true
+rule_5_2_7: true
+rule_5_2_8: true
+rule_5_3_1: true
+rule_5_7_1: true
+  #LEVEL 2 | MASTER
+rule_5_2_6: true
+rule_5_2_9: true
+rule_5_3_2: true
+rule_5_4_1: true
+rule_5_4_2: true
+rule_5_5_1: true
+rule_5_7_2: true
+rule_5_7_3: true
+rule_5_7_4: true
+  #LEVEL 1 | WORKER
+rule_5_1_3: true
+
+# API Server pod specification file
+api_server_pod_specification_file: "/etc/kubernetes/manifests/kube-apiserver.yaml"
+kubelet_client_certificate_path: "/var/lib/minikube/certs/apiserver-kubelet-client.crt"
+kubelet_client_key_path: "/var/lib/minikube/certs/apiserver-kubelet-client.key"
+kubelet_certificate_authority_path: "/this/path/needs/to/be/defined"
+insecure_port: 0
+secure_port: 8443
+audit_log_path: "/logs/kube-apiserver.log"
+audit_log_maxage: 30
+audit_log_maxbackup: 10
+audit_log_maxsize: 100
+request_timeout: 300s
+service_account_key_file: "/var/lib/minikube/certs/sa.pub"
+etcd_certfile: "/var/lib/minikube/certs/apiserver-etcd-client.crt"
+etcd_keyfile: "/var/lib/minikube/certs/apiserver-etcd-client.key"
+tls_cert_file: "/var/lib/minikube/certs/apiserver.crt"
+tls_private_key_file: "/var/lib/minikube/certs/apiserver.key"
+client_ca_file: "/var/lib/minikube/certs/ca.crt"
+etcd_cafile: "/var/lib/minikube/certs/etcd/ca.crt"
+encryption_provider_config: "/path/to/EncryptionConfig/File"
+encryption_provider_config_file_content: |
+  This is the content that belongs in the {{ encryption_provider_config }} file
+  Verify that `aescbc`, `kms` or `secretbox` is set as the encryption provider for all the desired `resources`.
+tls_cipher_suites: "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384"
+feature_gates: "RotateKubeletServerCertificate=true"
+
+# Controller Manager pod specification file
+controller_manager_pod_specification_file: "/etc/kubernetes/manifests/kube-controller-manager.yaml"
+terminated_pod_gc_threshold: 10
+controller_manager_profiling: "false"
+use_service_account_credentials: "true"
+service_account_private_key_file: "/var/lib/minikube/certs/sa.key"
+root_ca_file: "/var/lib/minikube/certs/ca.crt"
+controller_manager_bind_address: 127.0.0.1
+
+
+# Scheduler pod specification file
+scheduler_pod_specification_file: "/etc/kubernetes/manifests/kube-scheduler.yaml"
+scheduler_profiling: "false"
+scheduler_bind_address: 127.0.0.1
+
+# etcd pod specification file
+etcd_pod_specification_file: "/etc/kubernetes/manifests/etcd.yaml"
+etcd_data_directory: "/var/lib/minikube/etcd"
+etcd_cert_file: "/var/lib/minikube/certs/etcd/server.crt"
+etcd_key_file: "/var/lib/minikube/certs/etcd/server.key"
+client_cert_auth: "true"
+auto_tls: "false"
+peer_cert_file: "/var/lib/minikube/certs/etcd/peer.crt"
+peer_key_file: "/var/lib/minikube/certs/etcd/peer.key"
+peer_client_cert_auth: "true"
+peer_auto_tls: "false"
+trusted_ca_file: "/var/lib/minikube/certs/etcd/ca.crt"
+
+
+#kubelet
+kubelet_service_file: "/etc/systemd/system/kubelet.service.d/10-kubeadm.conf"
+proxy_kubeconfig_file: "/this/path/needs/to/be/defined"
+kubeconfig_kubelet_conf_file: "/etc/kubernetes/kubelet.conf"
+certificate_authorities_file: "/this/path/needs/to/be/defined"
+kubelet_config_file: "/var/lib/kubelet/config.yaml"
+kubelet_authentication_anonymous_enabled: "true"
+kubelet_authentication_x509_clientCAFile: "/var/lib/minikube/certs/ca.crt"
+streaming_connection_idle_timeout: 25s
+kubelet_tls_cert_file: "/this/path/needs/to/be/defined"
+kubelet_tls_private_key_file: "/this/path/needs/to/be/defined"
+kubelet_tls_cipher_suites: "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256"
+event_record_qps: 0

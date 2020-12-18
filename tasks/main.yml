@@ -1,0 +1,61 @@
+---
+- name: Gather distribution info
+  setup:
+      gather_subset: distribution,!all,!min
+  when:
+      - ansible_distribution is not defined
+  tags:
+      - always
+
+- name: Check OS system
+  assert:
+      that:
+          - ansible_system == 'Linux'
+      success_msg: "{{ ansible_system }} is the detected system."
+      fail_msg: "This role can only be run against Linux. {{ ansible_system }} is not supported."
+  tags:
+      - always
+
+#- name: Get a list of all service objects
+#  community.kubernetes.k8s_info:
+#    api_version: v1
+#    kind: Service
+#    namespace: default
+#  register: service_list
+
+- name: Check ansible version
+  assert:
+      that: ansible_version.full is version_compare(min_ansible_version, '>=')
+      msg: You must use Ansible {{ min_ansible_version }} or greater
+  tags:
+      - always
+
+- name: Execute the Control Plane Components tasks
+  import_tasks: section1.yml
+  when: section1_patch | bool
+  tags:
+      - section1
+
+- name: Execute the etcd related tasks
+  import_tasks: section2.yml
+  when: section2_patch | bool
+  tags:
+      - section2
+
+- name: Execute the Control Plane Configuration related tasks
+  import_tasks: section3.yml
+  when: section3_patch | bool
+  tags:
+      - section3
+
+- name: Execute the Worker Nodes related tasks
+  import_tasks: section4.yml
+  when: section4_patch | bool
+  tags:
+      - section4
+
+- name: Execute the Policies related tasks
+  import_tasks: section5.yml
+  when: section5_patch | bool
+  tags:
+      - section5
