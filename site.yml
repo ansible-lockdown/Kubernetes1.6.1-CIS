@@ -1,0 +1,9 @@
+---
+- hosts: kubeHost
+  vars:
+      is_container: false
+  become: yes
+  roles:
+      - role: "{{ playbook_dir }}"
+        system_is_container: "{{ is_container | default(false) }}"
+

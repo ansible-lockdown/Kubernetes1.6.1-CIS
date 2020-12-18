@@ -1,0 +1,708 @@
+---
+- name: "SCORED | 4.1.1 | PATCH | L1 | WORKER | Ensure that the `kubelet` service file has permissions of `644` or more restrictive."
+  file:
+    dest: "{{ kubelet_service_file }}"
+    state: file
+    mode: 0755
+  when: rule_4_1_1
+  tags:
+    - level1
+    - perms
+    - rule_4.1.1
+    - patch
+    - worker
+
+
+- name: "SCORED | 4.1.2 | PATCH | L1 | WORKER | Ensure that the kubelet service file ownership is set to root:root"
+  file:
+    path: "{{ kubelet_service_file }}"
+    state: file
+    owner: root
+    group: root
+  when:
+    - rule_4_1_2
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_4.1.2
+    - worker
+
+
+- name: "SCORED | 4.1.3 | PATCH | L1 | WORKER | If proxy kubeconfig file exists ensure permissions are set to 644 or more restrictive"
+  block:
+  - name: "SCORED | 4.1.3 | PATCH | L1 | WORKER | Check that the somefile.conf exists"
+    stat:
+      path: "{{ proxy_kubeconfig_file }}"
+    register: proxy_kubeconfig_file_stat
+  - name: "SCORED | 4.1.3 | PATCH | L1 | WORKER | Ensure that the proxy kubeconfig file ownership is set to 644 or more restrictive"
+    file:
+      dest: "{{ proxy_kubeconfig_file }}"
+      state: file
+      mode: 0644
+    when: proxy_kubeconfig_file_stat.stat.exists
+  when: rule_4_1_3
+  tags:
+    - level1
+    - perms
+    - rule_4.1.3
+    - patch
+    - worker
+
+
+- name: "SCORED | 4.1.4 | PATCH | L1 | WORKER | If proxy kubeconfig file exists ensure ownership is set to root:root"
+  block:
+  - name: "SCORED | 4.1.4 | PATCH | L1 | WORKER | Check that the somefile.conf exists"
+    stat:
+      path: "{{ proxy_kubeconfig_file }}"
+    register: proxy_kubeconfig_file_stat
+  - name: "SCORED | 4.1.4 | PATCH | L1 | WORKER | Ensure that the proxy kubeconfig file ownership is set to root:root"
+    file:
+      dest: "{{ proxy_kubeconfig_file }}"
+      state: file
+      owner: root
+      group: root
+    when: proxy_kubeconfig_file_stat.stat.exists
+  when: rule_4_1_4
+  tags:
+    - level1
+    - perms
+    - rule_4.1.4
+    - patch
+    - worker
+
+
+- name: "SCORED | 4.1.5 | PATCH | L1 | WORKER | Ensure that the --kubeconfig kubelet.conf file permissions are set to 644 or more restrictive"
+  file:
+    dest: "{{ kubeconfig_kubelet_conf_file }}"
+    state: file
+    mode: 0644
+  when: rule_4_1_5
+  tags:
+    - level1
+    - perms
+    - rule_4.1.5
+    - patch
+    - worker
+
+
+- name: "SCORED | 4.1.6 | PATCH | L1 | WORKER | Ensure that the --kubeconfig kubelet.conf file ownership is set to root:root"
+  file:
+    dest: "{{ kubeconfig_kubelet_conf_file }}"
+    state: file
+    owner: root
+    group: root
+  when: rule_4_1_6
+  tags:
+    - level1
+    - perms
+    - rule_4.1.6
+    - patch
+    - worker
+
+
+- name: "SCORED | 4.1.7 | PATCH | L1 | WORKER | Ensure that the certificate authorities file permissions are set to 644 or more restrictive"
+  block:
+  - name: "SCORED | 4.1.7 | PATCH | L1 | WORKER | Check that the certificate authorities file exists"
+    stat:
+      path: "{{ certificate_authorities_file }}"
+    register: certificate_authorities_file_stat
+  - name: "SCORED | 4.1.7 | PATCH | L1 | WORKER | Ensure that the certificate authorities file permissions are set to 644 or more restrictive"
+    file:
+      dest: "{{ certificate_authorities_file }}"
+      state: file
+      mode: 0644
+    when: certificate_authorities_file_stat.stat.exists
+  tags:
+    - level1
+    - perms
+    - rule_4.1.7
+    - patch
+    - worker
+
+
+- name: "SCORED | 4.1.8 | PATCH | L1 | WORKER | Ensure that the client certificate authorities file ownership is set to root:root"
+  block:
+  - name: "SCORED | 4.1.8 | PATCH | L1 | WORKER | Check that the certificate authorities file exists"
+    stat:
+      path: "{{ certificate_authorities_file }}"
+    register: certificate_authorities_file_stat
+  - name: "SCORED | 4.1.8 | PATCH | L1 | WORKER | Ensure that the client certificate authorities file ownership is set to root:root"
+    file:
+      dest: "{{ certificate_authorities_file }}"
+      state: file
+      owner: root
+      group: root
+    when: certificate_authorities_file_stat.stat.exists
+  tags:
+    - level1
+    - perms
+    - rule_4.1.8
+    - patch
+    - worker
+
+
+- name: "SCORED | 4.1.9 | PATCH | L1 | WORKER | Ensure that the kubelet --config configuration file has permissions set to 644 or more restrictive"
+  file:
+    dest: "{{ kubelet_config_file }}"
+    state: file
+    mode: 0644
+  when: rule_4_1_9
+  tags:
+    - level1
+    - perms
+    - rule_4.1.9
+    - patch
+    - worker
+
+
+- name: "SCORED | 4.1.10 | PATCH | L1 | WORKER | Ensure that the kubelet --config configuration file ownership is set to root:root"
+  file:
+    dest: "{{ kubelet_config_file }}"
+    state: file
+    owner: root
+    group: root
+  when: rule_4_1_10
+  tags:
+    - level1
+    - perms
+    - rule_4.1.10
+    - patch
+    - worker
+
+
+- name: "SCORED | 4.2.1 | PATCH | L1 | WORKER | Ensure that the --anonymous-auth argument is set to false"
+  block:
+  - name: "SCORED | 4.2.1 | PATCH | L1 | WORKER | Slurp file {{ kubelet_config_file }}"
+    slurp:
+      src: "{{ kubelet_config_file }}"
+    register: slurped_4_2_1
+  - name: "SCORED | 4.2.1 | PATCH | L1 | WORKER | Convert to dictionary"
+    set_fact:
+      before_4_2_1: "{{ slurped_4_2_1.content|b64decode|from_yaml }}"
+
+  - name: "SCORED | 4.2.1 | PATCH | L1 | WORKER | Add new value"
+    vars: 
+      new_value_4_2_1:
+        authentication:
+          anonymous:
+            enabled: false
+    set_fact:
+      after_4_2_1: "{{ before_4_2_1 | combine(new_value_4_2_1) }}"
+    when: before_4_2_1.authentication.anonymous.enabled is not defined
+
+  - name: "SCORED | 4.2.1 | PATCH | L1 | WORKER | Set new value"
+    set_fact:
+      after_4_2_1: "{{ before_4_2_1 | combine(after_4_2_1, recursive=True) }}"
+    vars: 
+      after_4_2_1:
+        authentication:
+          anonymous: 
+            enabled: false
+    when: before_4_2_1.authentication.anonymous.enabled is defined and before_4_2_1.authentication.anonymous.enabled != false
+  - name: "SCORED | 4.2.1 | PATCH | L1 | WORKER | Ensure that the --anonymous-auth argument is set to false"
+    copy:
+      content: '{{ after_4_2_1 | to_nice_yaml }}'
+      dest: "{{ kubelet_config_file }}"
+      backup: yes
+    when: after_4_2_1 is defined
+  when: rule_4_2_1
+  tags:
+    - level1
+    - perms
+    - rule_4.2.1
+    - patch
+    - worker
+
+
+- name: "SCORED | 4.2.2 | PATCH | L1 | WORKER | Ensure that the --authorization-mode argument is not set to AlwaysAllow"
+  block:
+  - name: "SCORED | 4.2.2 | PATCH | L1 | WORKER | Slurp file {{ kubelet_config_file }}"
+    slurp:
+      src: "{{ kubelet_config_file }}"
+    register: slurped_4_2_2
+  - name: "SCORED | 4.2.2 | PATCH | L1 | WORKER | Convert to dictionary"
+    set_fact:
+      before_4_2_2: "{{ slurped_4_2_2.content|b64decode|from_yaml }}"
+  - name: "SCORED | 4.2.2 | PATCH | L1 | WORKER | Add new value"
+    vars: 
+      new_value_4_2_2:
+        authorization:
+          mode: Webhook
+    set_fact:
+      after_4_2_2: "{{ before_4_2_2 | combine(new_value_4_2_2) }}"
+    when: before_4_2_2.authorization.mode is not defined
+  - name: "SCORED | 4.2.2 | PATCH | L1 | WORKER | Update existing value"
+    set_fact:
+      after_4_2_2: "{{ before_4_2_2 | combine(after_4_2_2, recursive=True) }}"
+    vars: 
+      after_4_2_2:
+        authorization:
+          mode: Webhook
+    when: before_4_2_2.authorization.mode is defined and before_4_2_2.authorization.mode != "Webhook"
+  - name: "SCORED | 4.2.2 | PATCH | L1 | WORKER | Ensure that the --authorization-mode argument is not set to AlwaysAllow"
+    copy:
+      content: '{{ after_4_2_2 | to_nice_yaml }}'
+      dest: "{{ kubelet_config_file }}"
+      backup: yes
+    when: after_4_2_2 is defined
+  when: rule_4_2_2
+  tags:
+    - level1
+    - perms
+    - rule_4.2.2
+    - patch
+    - worker
+
+
+- name: "SCORED | 4.2.3 | PATCH | L1 | WORKER | Ensure that the --client-ca-file argument is set as appropriate"
+  block:
+  - name: "SCORED | 4.2.3 | PATCH | L1 | WORKER | Slurp file {{ kubelet_config_file }}"
+    slurp:
+      src: "{{ kubelet_config_file }}"
+    register: slurped_4_2_3
+  - name: "SCORED | 4.2.3 | PATCH | L1 | WORKER | Convert to dictionary"
+    set_fact:
+      before_4_2_3: "{{ slurped_4_2_3.content|b64decode|from_yaml }}"
+  - name: "SCORED | 4.2.3 | PATCH | L1 | WORKER | Add new value"
+    vars: 
+      new_value_4_2_3:
+        authentication:
+          x509:
+            clientCAFile: "{{ kubelet_authentication_x509_clientCAFile }}"
+    set_fact:
+      after_4_2_3: "{{ before_4_2_3 | combine(new_value_4_2_3) }}"
+    when: before_4_2_3.authentication.x509.clientCAFile is not defined
+  - name: "SCORED | 4.2.3 | PATCH | L1 | WORKER | Update existing value"
+    set_fact:
+      after_4_2_3: "{{ before_4_2_3 | combine(after_4_2_3, recursive=True) }}"
+    vars: 
+      after_4_2_3:
+        authentication:
+          x509:
+            clientCAFile: "{{ kubelet_authentication_x509_clientCAFile }}"
+    when: before_4_2_3.authentication.x509.clientCAFile is defined and before_4_2_3.authentication.x509.clientCAFile != kubelet_authentication_x509_clientCAFile
+  - name: "SCORED | 4.2.3 | PATCH | L1 | WORKER | Ensure that the --client-ca-file argument is set as appropriate"
+    copy:
+      content: '{{ after_4_2_3 | to_nice_yaml }}'
+      dest: "{{ kubelet_config_file }}"
+      backup: yes
+    when: after_4_2_3 is defined
+  when: rule_4_2_3
+  tags:
+    - level1
+    - perms
+    - rule_4.2.3
+    - patch
+    - worker
+
+
+- name: "SCORED | 4.2.4 | PATCH | L1 | WORKER | Verify that the --read-only-port argument is set to 0"
+  block:
+  - name: "SCORED | 4.2.4 | PATCH | L1 | WORKER | Slurp file {{ kubelet_config_file }}"
+    slurp:
+      src: "{{ kubelet_config_file }}"
+    register: slurped_4_2_4
+  - name: "SCORED | 4.2.4 | PATCH | L1 | WORKER | Convert to dictionary"
+    set_fact:
+      before_4_2_4: "{{ slurped_4_2_4.content|b64decode|from_yaml }}"
+  - name: "SCORED | 4.2.4 | PATCH | L1 | WORKER | Add new value"
+    vars: 
+      new_value_4_2_4:
+        readOnlyPort: 0
+    set_fact:
+      after_4_2_4: "{{ before_4_2_4 | combine(new_value_4_2_4) }}"
+    when: before_4_2_4.readOnlyPort is not defined
+  - name: "SCORED | 4.2.4 | PATCH | L1 | WORKER | Update existing value"
+    set_fact:
+      after_4_2_4: "{{ before_4_2_4 | combine(after_4_2_4, recursive=True) }}"
+    vars: 
+      after_4_2_4:
+        readOnlyPort: 0
+    when: before_4_2_4.readOnlyPort is defined and before_4_2_4.readOnlyPort != 0
+  - name: "SCORED | 4.2.4 | PATCH | L1 | WORKER | Verify that the --read-only-port argument is set to 0"
+    copy:
+      content: '{{ after_4_2_4 | to_nice_yaml }}'
+      dest: "{{ kubelet_config_file }}"
+      backup: yes
+    when: after_4_2_4 is defined
+  when: rule_4_2_4
+  tags:
+    - level1
+    - perms
+    - rule_4.2.4
+    - patch
+    - worker
+
+
+- name: "SCORED | 4.2.5 | PATCH | L1 | WORKER | Ensure that the --streaming-connection-idle-timeout argument is not set to 0"
+  block:
+  - name: "SCORED | 4.2.5 | PATCH | L1 | WORKER | Slurp file {{ kubelet_config_file }}"
+    slurp:
+      src: "{{ kubelet_config_file }}"
+    register: slurped_4_2_5
+  - name: "SCORED | 4.2.5 | PATCH | L1 | WORKER | Convert to dictionary"
+    set_fact:
+      before_4_2_5: "{{ slurped_4_2_5.content|b64decode|from_yaml }}"
+  - name: "SCORED | 4.2.5 | PATCH | L1 | WORKER | Add new value"
+    vars: 
+      new_value_4_2_5:
+        streamingConnectionIdleTimeout: "{{ streaming_connection_idle_timeout }}"
+    set_fact:
+      after_4_2_5: "{{ before_4_2_5 | combine(new_value_4_2_5) }}"
+    when: before_4_2_5.streamingConnectionIdleTimeout is not defined
+  - name: "SCORED | 4.2.5 | PATCH | L1 | WORKER | Update existing value"
+    set_fact:
+      after_4_2_5: "{{ before_4_2_5 | combine(after_4_2_5, recursive=True) }}"
+    vars: 
+      after_4_2_5:
+        streamingConnectionIdleTimeout: "{{ streaming_connection_idle_timeout }}"
+    when: before_4_2_5.streamingConnectionIdleTimeout is defined and before_4_2_5.streamingConnectionIdleTimeout != streaming_connection_idle_timeout
+  - name: "SCORED | 4.2.5 | PATCH | L1 | WORKER | Ensure that the --streaming-connection-idle-timeout argument is not set to 0"
+    copy:
+      content: '{{ after_4_2_5 | to_nice_yaml }}'
+      dest: "{{ kubelet_config_file }}"
+      backup: yes
+    when: after_4_2_5 is defined
+  when: rule_4_2_5
+  tags:
+    - level1
+    - perms
+    - rule_4.2.5
+    - patch
+    - worker
+
+
+- name: "SCORED | 4.2.6 | PATCH | L1 | WORKER | Ensure that the --protect-kernel-defaults argument is set to true"
+  block:
+  - name: "SCORED | 4.2.6 | PATCH | L1 | WORKER | Slurp file {{ kubelet_config_file }}"
+    slurp:
+      src: "{{ kubelet_config_file }}"
+    register: slurped_4_2_6
+  - name: "SCORED | 4.2.6 | PATCH | L1 | WORKER | Convert to dictionary"
+    set_fact:
+      before_4_2_6: "{{ slurped_4_2_6.content|b64decode|from_yaml }}"
+  - name: "SCORED | 4.2.6 | PATCH | L1 | WORKER | Add new value"
+    vars: 
+      new_value_4_2_6:
+        protectKernelDefaults: true
+    set_fact:
+      after_4_2_6: "{{ before_4_2_6 | combine(new_value_4_2_6) }}"
+    when: before_4_2_6.protectKernelDefaults is not defined
+  - name: "SCORED | 4.2.6 | PATCH | L1 | WORKER | Update existing value"
+    set_fact:
+      after_4_2_6: "{{ before_4_2_6 | combine(after_4_2_6, recursive=True) }}"
+    vars: 
+      after_4_2_6:
+        protectKernelDefaults: true
+    when: before_4_2_6.protectKernelDefaults is defined and before_4_2_6.protectKernelDefaults != true
+  - name: "SCORED | 4.2.6 | PATCH | L1 | WORKER | Ensure that the --protect-kernel-defaults argument is set to true"
+    copy:
+      content: '{{ after_4_2_6 | to_nice_yaml }}'
+      dest: "{{ kubelet_config_file }}"
+      backup: yes
+    when: after_4_2_6 is defined
+  when: rule_4_2_6
+  tags:
+    - level1
+    - perms
+    - rule_4.2.6
+    - patch
+    - worker
+
+
+- name: "SCORED | 4.2.7 | PATCH | L1 | WORKER | Ensure that the --make-iptables-util-chains argument is set to true"
+  block:
+  - name: "SCORED | 4.2.7 | PATCH | L1 | WORKER | Slurp file {{ kubelet_config_file }}"
+    slurp:
+      src: "{{ kubelet_config_file }}"
+    register: slurped_4_2_7
+  - name: "SCORED | 4.2.7 | PATCH | L1 | WORKER | Convert to dictionary"
+    set_fact:
+      before_4_2_7: "{{ slurped_4_2_7.content|b64decode|from_yaml }}"
+  - name: "SCORED | 4.2.7 | PATCH | L1 | WORKER | Add new value"
+    vars: 
+      new_value_4_2_7:
+        makeIPTablesUtilChains: true
+    set_fact:
+      after_4_2_7: "{{ before_4_2_7 | combine(new_value_4_2_7) }}"
+    when: before_4_2_7.makeIPTablesUtilChains is not defined
+  - name: "SCORED | 4.2.7 | PATCH | L1 | WORKER | Update existing value"
+    set_fact:
+      after_4_2_7: "{{ before_4_2_7 | combine(after_4_2_7, recursive=True) }}"
+    vars: 
+      after_4_2_7:
+        makeIPTablesUtilChains: true
+    when: before_4_2_7.makeIPTablesUtilChains is defined and before_4_2_7.makeIPTablesUtilChains != true
+  - name: "SCORED | 4.2.7 | PATCH | L1 | WORKER | Ensure that the --make-iptables-util-chains argument is set to true"
+    copy:
+      content: '{{ after_4_2_7 | to_nice_yaml }}'
+      dest: "{{ kubelet_config_file }}"
+      backup: yes
+    when: after_4_2_7 is defined
+  when: rule_4_2_7
+  tags:
+    - level1
+    - perms
+    - rule_4.2.7
+    - patch
+    - worker
+
+
+#Speelman | Need to develop a way to pull the value out of the line in the file
+- name: "SCORED | 4.2.8 | AUDIT | L1 | WORKER | Ensure that the --hostname-override argument is not set"
+  block:
+  - name: "SCORED | 4.2.8 | AUDIT | L1 | WORKER | Test if --authorization-mode=AlwaysAllow"
+    lineinfile:
+      path: "{{ kubelet_service_file }}"
+      regexp: '--hostname-override'
+      state: absent
+    check_mode: yes
+    changed_when: false
+    register: hostname_override
+  - name: "SCORED | 4.2.8 | AUDIT | L1 | WORKER | Assert --hostname-override argument is not set"
+    assert:
+      that: not hostname_override.found
+      success_msg: "'--hostname-override' argument is not set"
+      fail_msg: "'--hostname-override' argument is set"
+  when:
+    - rule_4_2_8
+  tags:
+    - level1
+    - audit
+    - rule_4.2.8
+    - worker
+    - followup
+
+
+- name: "SCORED | 4.2.9 | PATCH | L2 | WORKER | Ensure that the --event-qps argument is set to 0 or a level which ensures appropriate event capture"
+  block:
+  - name: "SCORED | 4.2.9 | PATCH | L2 | WORKER | Slurp file {{ kubelet_config_file }}"
+    slurp:
+      src: "{{ kubelet_config_file }}"
+    register: slurped_4_2_9
+  - name: "SCORED | 4.2.9 | PATCH | L2 | WORKER | Convert to dictionary"
+    set_fact:
+      before_4_2_9: "{{ slurped_4_2_9.content|b64decode|from_yaml }}"
+  - name: "SCORED | 4.2.9 | PATCH | L2 | WORKER | Add new value"
+    vars: 
+      new_value_4_2_9:
+        eventRecordQPS: "{{ event_record_qps }}"
+    set_fact:
+      after_4_2_9: "{{ before_4_2_9 | combine(new_value_4_2_9) }}"
+    when: before_4_2_9.eventRecordQPS is not defined
+  - name: "SCORED | 4.2.9 | PATCH | L2 | WORKER | Update existing value"
+    set_fact:
+      after_4_2_9: "{{ before_4_2_9 | combine(after_4_2_9, recursive=True) }}"
+    vars: 
+      after_4_2_9:
+        eventRecordQPS: "{{ event_record_qps }}"
+    when: before_4_2_9.eventRecordQPS is defined and before_4_2_9.eventRecordQPS != event_record_qps
+  - name: "SCORED | 4.2.9 | PATCH | L2 | WORKER | Ensure that the --event-qps argument is set to 0 or a level which ensures appropriate event capture"
+    copy:
+      content: '{{ after_4_2_9 | to_nice_yaml }}'
+      dest: "{{ kubelet_config_file }}"
+      backup: yes
+    when: after_4_2_9 is defined
+  when: rule_4_2_9
+  tags:
+    - level2
+    - perms
+    - rule_4.2.9
+    - patch
+    - worker
+
+
+- name: "SCORED | 4.2.10 | PATCH | L1 | WORKER | Ensure that the --tls-cert-file and --tls-private-key-file arguments are set as appropriate"
+  block:
+  ### tlsCertFile ###
+  - name: "SCORED | 4.2.10 | PATCH | L1 | WORKER | Slurp file {{ kubelet_config_file }}"
+    slurp:
+      src: "{{ kubelet_config_file }}"
+    register: slurped_4_2_10_1
+  - name: "SCORED | 4.2.10 | PATCH | L1 | WORKER | Convert to dictionary"
+    set_fact:
+      before_4_2_10_1: "{{ slurped_4_2_10_1.content|b64decode|from_yaml }}"
+  - name: "SCORED | 4.2.10 | PATCH | L1 | WORKER | Add new value (tlsCertFile)"
+    vars: 
+      new_value_4_2_10_1:
+        tlsCertFile: "{{ kubelet_tls_cert_file }}"
+    set_fact:
+      after_4_2_10_1: "{{ before_4_2_10_1 | combine(new_value_4_2_10_1) }}"
+    when: before_4_2_10_1.tlsCertFile is not defined
+  - name: "SCORED | 4.2.10 | PATCH | L1 | WORKER | Update existing value (tlsCertFile)"
+    set_fact:
+      after_4_2_10_1: "{{ before_4_2_10_1 | combine(after_4_2_10_1, recursive=True) }}"
+    vars: 
+      after_4_2_10_1:
+        tlsCertFile: "{{ kubelet_tls_cert_file }}"
+    when: before_4_2_10_1.tlsCertFile is defined and before_4_2_10_1.tlsCertFile != kubelet_tls_cert_file
+  - name: "SCORED | 4.2.10 | PATCH | L1 | WORKER | Ensure that the --tls-cert-file argument is set as appropriate"
+    copy:
+      content: '{{ after_4_2_10_1 | to_nice_yaml }}'
+      dest: "{{ kubelet_config_file }}"
+      backup: yes
+    when: after_4_2_10_1 is defined
+
+  ### tlsPrivateKeyFile ###
+  - name: "SCORED | 4.2.10 | PATCH | L1 | WORKER | Slurp file {{ kubelet_config_file }}"
+    slurp:
+      src: "{{ kubelet_config_file }}"
+    register: slurped_4_2_10_2
+  - name: "SCORED | 4.2.10 | PATCH | L1 | WORKER | Convert to dictionary"
+    set_fact:
+      before_4_2_10_2: "{{ slurped_4_2_10_2.content|b64decode|from_yaml }}"
+  - name: "SCORED | 4.2.10 | PATCH | L1 | WORKER | Add new value (tlsPrivateKeyFile)"
+    vars: 
+      new_value_4_2_10_2:
+        tlsPrivateKeyFile: "{{ kubelet_tls_private_key_file }}"
+    set_fact:
+      after_4_2_10_2: "{{ before_4_2_10_2 | combine(new_value_4_2_10_2) }}"
+    when: before_4_2_10_2.tlsPrivateKeyFile is not defined
+  - name: "SCORED | 4.2.10 | PATCH | L1 | WORKER | Update existing value (tlsPrivateKeyFile)"
+    set_fact:
+      after_4_2_10_2: "{{ before_4_2_10_2 | combine(after_4_2_10_2, recursive=True) }}"
+    vars: 
+      after_4_2_10_2:
+        tlsPrivateKeyFile: "{{ kubelet_tls_private_key_file }}"
+    when: before_4_2_10_2.tlsPrivateKeyFile is defined and before_4_2_10_2.tlsPrivateKeyFile != kubelet_tls_private_key_file
+  - name: "SCORED | 4.2.10 | PATCH | L1 | WORKER | Ensure that the --tls-private-key-file argument is set as appropriate"
+    copy:
+      content: '{{ after_4_2_10_2 | to_nice_yaml }}'
+      dest: "{{ kubelet_config_file }}"
+      backup: yes
+    when: after_4_2_10_2 is defined
+  when: rule_4_2_10
+  tags:
+    - level1
+    - perms
+    - rule_4.2.10
+    - patch
+    - worker
+
+
+- name: "SCORED | 4.2.11 | PATCH | L1 | WORKER | Ensure that the --rotate-certificates argument is not set to false"
+  block:
+  - name: "SCORED | 4.2.11 | PATCH | L1 | WORKER | Slurp file {{ kubelet_config_file }}"
+    slurp:
+      src: "{{ kubelet_config_file }}"
+    register: slurped_4_2_11
+  - name: "SCORED | 4.2.11 | PATCH | L1 | WORKER | Convert to dictionary"
+    set_fact:
+      before_4_2_11: "{{ slurped_4_2_11.content|b64decode|from_yaml }}"
+  - name: "SCORED | 4.2.11 | PATCH | L1 | WORKER | Add new value"
+    vars: 
+      new_value_4_2_11:
+        rotateCertificates: true
+    set_fact:
+      after_4_2_11: "{{ before_4_2_11 | combine(new_value_4_2_11) }}"
+    when: before_4_2_11.rotateCertificates is not defined
+  - name: "SCORED | 4.2.11 | PATCH | L1 | WORKER | Update existing value"
+    set_fact:
+      after_4_2_11: "{{ before_4_2_11 | combine(after_4_2_11, recursive=True) }}"
+    vars: 
+      after_4_2_11:
+        rotateCertificates: true
+    when: before_4_2_11.rotateCertificates is defined and before_4_2_11.rotateCertificates != true
+  - name: "SCORED | 4.2.11 | PATCH | L1 | WORKER | Ensure that the --rotate-certificates argument is not set to false "
+    copy:
+      content: '{{ after_4_2_11 | to_nice_yaml }}'
+      dest: "{{ kubelet_config_file }}"
+      backup: yes
+    when: after_4_2_11 is defined
+  when: rule_4_2_11
+  tags:
+    - level1
+    - perms
+    - rule_4.2.11
+    - patch
+    - worker
+
+
+- name: "SCORED | 4.2.12 | PATCH | L1 | WORKER | Verify that the RotateKubeletServerCertificate argument is set to true"
+  block:
+  - name: "SCORED | 4.2.12 | PATCH | L1 | WORKER | Slurp file {{ kubelet_config_file }}"
+    slurp:
+      src: "{{ kubelet_config_file }}"
+    register: slurped_4_2_12
+  - name: "SCORED | 4.2.12 | PATCH | L1 | WORKER | Convert to dictionary"
+    set_fact:
+      before_4_2_12: "{{ slurped_4_2_12.content|b64decode|from_yaml }}"
+  - name: "SCORED | 4.2.12 | PATCH | L1 | WORKER | Add new value"
+    vars: 
+      new_value_4_2_12:
+        serverTLSBootstrap: true
+    set_fact:
+      after_4_2_12: "{{ before_4_2_12 | combine(new_value_4_2_12) }}"
+    when: before_4_2_12.serverTLSBootstrap is not defined
+  - name: "SCORED | 4.2.12 | PATCH | L1 | WORKER | Update existing value"
+    set_fact:
+      after_4_2_12: "{{ before_4_2_12 | combine(after_4_2_12, recursive=True) }}"
+    vars: 
+      after_4_2_12:
+        serverTLSBootstrap: true
+    when: before_4_2_12.serverTLSBootstrap is defined and before_4_2_12.serverTLSBootstrap != true
+  - name: "SCORED | 4.2.12 | PATCH | L1 | WORKER | Verify that the RotateKubeletServerCertificate argument is set to true"
+    copy:
+      content: '{{ after_4_2_12 | to_nice_yaml }}'
+      dest: "{{ kubelet_config_file }}"
+      backup: yes
+    when: after_4_2_12 is defined
+  when: rule_4_2_12
+  tags:
+    - level1
+    - perms
+    - rule_4.2.12
+    - patch
+    - worker
+
+
+- name: "SCORED | 4.2.13 | PATCH | L1 | WORKER | Ensure that the Kubelet only makes use of Strong Cryptographic Ciphers"
+  block:
+  - name: "SCORED | 4.2.13 | PATCH | L1 | WORKER | Slurp file {{ kubelet_config_file }}"
+    slurp:
+      src: "{{ kubelet_config_file }}"
+    register: slurped_4_2_13
+  - name: "SCORED | 4.2.13 | PATCH | L1 | WORKER | Convert to dictionary"
+    set_fact:
+      before_4_2_13: "{{ slurped_4_2_13.content|b64decode|from_yaml }}"
+  - name: "SCORED | 4.2.13 | PATCH | L1 | WORKER | Add new value"
+    vars: 
+      new_value_4_2_13:
+        TLSCipherSuites: "{{ kubelet_tls_cipher_suites }}"
+    set_fact:
+      after_4_2_13: "{{ before_4_2_13 | combine(new_value_4_2_13) }}"
+    when: before_4_2_13.TLSCipherSuites is not defined
+  - name: "SCORED | 4.2.13 | PATCH | L1 | WORKER | Update existing value"
+    set_fact:
+      after_4_2_13: "{{ before_4_2_13 | combine(after_4_2_13, recursive=True) }}"
+    vars: 
+      after_4_2_13:
+        TLSCipherSuites: "{{ kubelet_tls_cipher_suites }}"
+    when: before_4_2_13.TLSCipherSuites is defined and before_4_2_13.TLSCipherSuites != kubelet_tls_cipher_suites
+  - name: "SCORED | 4.2.13 | PATCH | L1 | WORKER | Ensure that the Kubelet only makes use of Strong Cryptographic Ciphers"
+    copy:
+      content: '{{ after_4_2_13 | to_nice_yaml }}'
+      dest: "{{ kubelet_config_file }}"
+      backup: yes
+    when: after_4_2_13 is defined
+  when: rule_4_2_13
+  tags:
+    - level1
+    - perms
+    - rule_4.2.13
+    - patch
+    - worker
+
+
+
+########################################################
+#region kubelet configuration
+########################################################
+
+
+
+
+########################################################
+#enedregion kubelet configuration
+########################################################
