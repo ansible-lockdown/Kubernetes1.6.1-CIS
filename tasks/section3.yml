@@ -1,0 +1,43 @@
+---
+- name: "SCORED | 3.1.1 | AUDIT | L1 | MASTER | Client certificate authentication should not be used for users"
+  debug:
+    msg: "Alternative mechanisms provided by Kubernetes such as the use of OIDC should be implemented in place of client certificates."
+  when: rule_3_1_1
+  tags:
+    - level1
+    - rule_3.1.1
+    - audit
+    - master
+
+
+- name: "SCORED | 3.2.1 | AUDIT | L1 | MASTER | Ensure that a minimal audit policy is created"
+  debug:
+    msg:
+    - "Create an audit policy file for your cluster."
+    - "Run the following command on one of the cluster master nodes:"
+    - "ps -ef | grep kube-apiserver"
+    - "Verify that the `--audit-policy-file` is set. Review the contents of the file specified and ensure that it contains a valid audit policy."
+  when: rule_3_1_1
+  tags:
+    - level1
+    - rule_3.1.1
+    - audit
+    - master
+
+
+- name: "SCORED | 3.2.2 | AUDIT | L2 | MASTER | Ensure that the audit policy covers key security concerns"
+  debug:
+    msg:
+    - "Ensure that the audit policy created for the cluster covers key security concerns."
+    - "Consider modification of the audit policy in use on the cluster to include these items, at a minimum."
+    - "Review the audit policy provided for the cluster and ensure that it covers at least the following areas :"
+    - "Access to Secrets managed by the cluster. Care should be taken to only log Metadata for requests to Secrets, ConfigMaps, and TokenReviews, in order to avoid the risk of logging sensitive data."
+    - "Modification of `pod` and `deployment` objects."
+    - "Use of `pods/exec`, `pods/portforward`, `pods/proxy` and `services/proxy`."
+    - "For most requests, minimally logging at the Metadata level is recommended (the most basic level of logging)."
+  when: rule_3_2_2
+  tags:
+    - level2
+    - rule_3.2.2
+    - audit
+    - master

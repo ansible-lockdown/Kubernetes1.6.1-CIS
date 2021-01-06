@@ -1,0 +1,358 @@
+---
+- name: "SCORED | 5.1.1 | AUDIT | L1 | MASTER | Ensure that the cluster-admin role is only used where required"
+  debug:
+    msg:
+      - "Identify all clusterrolebindings to the cluster-admin role. Check if they are used and if they need this role or if they could use a role with fewer privileges."
+      - "Where possible, first bind users to a lower privileged role and then remove the clusterrolebinding to the cluster-admin role :"
+      - "kubectl delete clusterrolebinding [name]"
+  when: rule_5_1_1
+  tags:
+    - level1
+    - rule_5.1.1
+    - audit
+    - master
+
+
+- name: "SCORED | 5.1.2 | AUDIT | L1 | MASTER | Minimize access to secrets"
+  debug:
+    msg:
+      - "Where possible, remove `get`, `list` and `watch` access to `secret` objects in the cluster."
+      - "Review the users who have `get`, `list` or `watch` access to `secrets` objects in the Kubernetes API."
+  when: rule_5_1_2
+  tags:
+    - level1
+    - rule_5.1.2
+    - audit
+    - master
+
+
+- name: "SCORED | 5.1.3 | AUDIT | L2 | WORKER | Minimize wildcard use in Roles and ClusterRoles"
+  debug:
+    msg:
+      - "Kubernetes Roles and ClusterRoles provide access to resources based on sets of objects and actions that can be taken on those objects. It is possible to set either of these to be the wildcard '*' which matches all items."
+      - "Use of wildcards is not optimal from a security perspective as it may allow for inadvertent access to be granted when new resources are added to the Kubernetes API either as CRDs or in later versions of the product."
+      - "Where possible replace any use of wildcards in clusterroles and roles with specific objects or actions."
+      - "Retrieve the roles defined across each namespaces in the cluster and review for wildcards"
+      - "kubectl get roles --all-namespaces -o yaml"
+      - "Retrieve the cluster roles defined in the cluster and review for wildcards"
+      - "kubectl get clusterroles -o yaml"
+  when: rule_5_1_3
+  tags:
+    - level1
+    - rule_5.1.3
+    - audit
+    - worker
+
+
+- name: "SCORED | 5.1.4 | AUDIT | L1 | MASTER | Minimize access to create pods"
+  debug:
+    msg:
+      - "Where possible, remove `create` access to `pod` objects in the cluster."
+      - "Review the users who have create access to pod objects in the Kubernetes API."
+  when: rule_5_1_4
+  tags:
+    - level1
+    - rule_5.1.4
+    - audit
+    - master
+
+
+- name: "SCORED | 5.1.5 | AUDIT | L1 | MASTER | Ensure that default service accounts are not actively used."
+  debug:
+    msg:
+      - "Create explicit service accounts wherever a Kubernetes workload requires specific access to the Kubernetes API server."
+      - "Modify the configuration of each default service account to include this value"
+      - "automountServiceAccountToken: false"
+      - "For each namespace in the cluster, review the rights assigned to the default service account and ensure that it has no roles or cluster roles bound to it apart from the defaults."
+      - "Additionally ensure that the 'automountServiceAccountToken: false' setting is in place for each default service account."
+  when: rule_5_1_5
+  tags:
+    - level1
+    - rule_5.1.5
+    - audit
+    - master
+
+
+- name: "SCORED | 5.1.6 | AUDIT | L1 | MASTER | Ensure that Service Account Tokens are only mounted where necessary"
+  debug:
+    msg:
+      - "Modify the definition of pods and service accounts which do not need to mount service account tokens to disable it."
+      - "Review pod and service account objects in the cluster and ensure that the option below is set, unless the resource explicitly requires this access."
+      - "automountServiceAccountToken: false"
+  when: rule_5_1_6
+  tags:
+    - level1
+    - rule_5.1.6
+    - audit
+    - master
+
+
+- name: "SCORED | 5.2.1 | AUDIT | L1 | MASTER | Minimize the admission of privileged containers"
+  debug:
+    msg:
+      - "Create a PSP as described in the Kubernetes documentation, ensuring that the `.spec.privileged` field is omitted or set to `false`."
+      - "Get the set of PSPs with the following command:"
+      - "kubectl get psp"
+      - "For each PSP, check whether privileged is enabled:"
+      - "kubectl get psp <name> -o=jsonpath='{.spec.privileged}'"
+      - "Verify that there is at least one PSP which does not return `true`."
+  when: rule_5_2_1
+  tags:
+    - level1
+    - rule_5.2.1
+    - audit
+    - master
+
+- name: "SCORED | 5.2.2 | AUDIT | L1 | MASTER | Minimize the admission of containers wishing to share the host process ID namespace"
+  debug:
+    msg:
+      - "Create a PSP as described in the Kubernetes documentation, ensuring that the `.spec.hostPID` field is omitted or set to false."
+      - "Get the set of PSPs with the following command:"
+      - "kubectl get psp"
+      - "For each PSP, check whether privileged is enabled:"
+      - "kubectl get psp <name> -o=jsonpath='{.spec.hostPID}'"
+      - "Verify that there is at least one PSP which does not return true."
+  when: rule_5_2_2
+  tags:
+    - level1
+    - rule_5.2.2
+    - audit
+    - master
+
+
+- name: "SCORED | 5.2.3 | AUDIT | L1 | MASTER | Minimize the admission of containers wishing to share the host IPC namespace"
+  debug:
+    msg:
+      - "Create a PSP as described in the Kubernetes documentation, ensuring that the `.spec.hostIPC` field is omitted or set to false."
+      - "Get the set of PSPs with the following command:"
+      - "kubectl get psp"
+      - "For each PSP, check whether privileged is enabled:"
+      - "kubectl get psp <name> -o=jsonpath='{.spec.hostIPC}'"
+      - "Verify that there is at least one PSP which does not return true."
+  when: rule_5_2_3
+  tags:
+    - level1
+    - rule_5.2.3
+    - audit
+    - master
+
+
+- name: "SCORED | 5.2.4 | AUDIT | L1 | MASTER | Minimize the admission of containers wishing to share the host network namespace"
+  debug:
+    msg:
+      - "Create a PSP as described in the Kubernetes documentation, ensuring that the `.spec.hostNetwork` field is omitted or set to false."
+      - "Get the set of PSPs with the following command:"
+      - "kubectl get psp"
+      - "For each PSP, check whether privileged is enabled:"
+      - "kubectl get psp <name> -o=jsonpath='{.spec.hostNetwork}'"
+      - "Verify that there is at least one PSP which does not return true."
+  when: rule_5_2_4
+  tags:
+    - level1
+    - rule_5.2.4
+    - audit
+    - master
+
+
+- name: "SCORED | 5.2.5 | AUDIT | L1 | MASTER | Minimize the admission of containers with allowPrivilegeEscalation"
+  debug:
+    msg:
+      - "Create a PSP as described in the Kubernetes documentation, ensuring that the `.spec.allowPrivilegeEscalation` field is omitted or set to false."
+      - "Get the set of PSPs with the following command:"
+      - "kubectl get psp"
+      - "For each PSP, check whether privileged is enabled:"
+      - "kubectl get psp <name> -o=jsonpath='{.spec.allowPrivilegeEscalation}'"
+      - "Verify that there is at least one PSP which does not return true."
+  when: rule_5_2_5
+  tags:
+    - level1
+    - rule_5.2.5
+    - audit
+    - master
+
+
+- name: "SCORED | 5.2.6 | AUDIT | L2 | MASTER | Minimize the admission of root containers"
+  debug:
+    msg:
+      - "Do not generally permit containers to be run as the root user."
+      - "Create a PSP as described in the Kubernetes documentation, ensuring that the `.spec.runAsUser.rule` is set to either `MustRunAsNonRoot` or `MustRunAs` with the range of UIDs not including 0."
+  when: rule_5_2_6
+  tags:
+    - level2
+    - rule_5.2.6
+    - audit
+    - master
+
+
+- name: "SCORED | 5.2.7 | AUDIT | L1 | MASTER | Minimize the admission of containers with the NET_RAW capability"
+  debug:
+    msg:
+      - "Create a PSP as described in the Kubernetes documentation, ensuring that the `.spec.requiredDropCapabilities` is set to include either `NET_RAW` or `ALL`."
+      - "Get the set of PSPs with the following command:"
+      - "kubectl get psp"
+      - "For each PSP, check whether NET_RAW is disabled:"
+      - "kubectl get psp <name> -o=jsonpath='{.spec.requiredDropCapabilities}'"
+      - "Verify that there is at least one PSP which returns NET_RAW or ALL."
+  when: rule_5_2_7
+  tags:
+    - level1
+    - rule_5.2.7
+    - audit
+    - master
+
+
+- name: "SCORED | 5.2.8 | AUDIT | L1 | MASTER | Minimize the admission of containers with added capabilities"
+  debug:
+    msg:
+      - "Ensure that `allowedCapabilities` is not present in PSPs for the cluster unless it is set to an empty array."
+      - "Get the set of PSPs with the following command:"
+      - "kubectl get psp"
+      - "Verify that there are no PSPs present which have `allowedCapabilities` set to anything other than an empty array."
+  when: rule_5_2_8
+  tags:
+    - level1
+    - rule_5.2.8
+    - audit
+    - master
+
+
+- name: "SCORED | 5.2.9 | AUDIT | L2 | MASTER | Minimize the admission of containers with capabilities assigned"
+  debug:
+    msg:
+      - "Do not generally permit containers with capabilities"
+      - "Review the use of capabilities in applications running on your cluster. Where a namespace contains applications which do not require any Linux capabilities to operate consider adding a PSP which forbids the admission of containers which do not drop all capabilities."
+  when: rule_5_2_9
+  tags:
+    - level2
+    - rule_5.2.9
+    - audit
+    - master
+
+
+- name: "SCORED | 5.3.1 | AUDIT | L1 | MASTER | Ensure that the CNI in use supports Network Policies"
+  debug:
+    msg:
+      - "If the CNI plugin in use does not support network policies, consideration should be given to making use of a different plugin, or finding an alternate mechanism for restricting traffic in the Kubernetes cluster."
+  when: rule_5_3_1
+  tags:
+    - level1
+    - rule_5.3.1
+    - audit
+    - master
+
+
+- name: "SCORED | 5.3.2 | AUDIT | L2 | MASTER | Ensure that all Namespaces have Network Policies defined"
+  debug:
+    msg:
+      - "Use network policies to isolate traffic in your cluster network."
+      - "Follow the documentation and create `NetworkPolicy` objects as you need them."
+      - "Run the below command and review the `NetworkPolicy` objects created in the cluster."
+      - "kubectl --all-namespaces get networkpolicy"
+      - "Ensure that each namespace defined in the cluster has at least one Network Policy."
+  when: rule_5_3_2
+  tags:
+    - level2
+    - rule_5.3.2
+    - audit
+    - master
+
+
+- name: "SCORED | 5.4.1 | AUDIT | L2 | MASTER | Prefer using secrets as files over secrets as environment variables"
+  debug:
+    msg:
+      - "Kubernetes supports mounting secrets as data volumes or as environment variables. Minimize the use of environment variable secrets."
+      - "If possible, rewrite application code to read secrets from mounted secret files, rather than from environment variables."
+      - "Run the following command to find references to objects which use environment variables defined from secrets."
+      - "kubectl get all -o jsonpath='{range .items[?(@..secretKeyRef)]} {.kind} {.metadata.name} {'\n'}{end}' -A"
+  when: rule_5_4_1
+  tags:
+    - level2
+    - rule_5.4.1
+    - audit
+    - master
+
+
+- name: "SCORED | 5.4.2 | AUDIT | L2 | MASTER | Consider external secret storage"
+  debug:
+    msg:
+      - "Consider the use of an external secrets storage and management system, instead of using Kubernetes Secrets directly, if you have more complex secret management needs. Ensure the solution requires authentication to access secrets, has auditing of access to and use of secrets, and encrypts secrets. Some solutions also make it easier to rotate secrets."
+      - "Refer to the secrets management options offered by your cloud provider or a third-party secrets management solution."
+      - "Review your secrets management implementation."
+  when: rule_5_4_2
+  tags:
+    - level2
+    - rule_5.4.2
+    - audit
+    - master
+
+
+- name: "SCORED | 5.5.1 | AUDIT | L2 | MASTER | Configure Image Provenance using ImagePolicyWebhook admission controller"
+  debug:
+    msg:
+      - "Configure Image Provenance for your deployment."
+      - "Follow the Kubernetes documentation and setup image provenance."
+      - "Review the pod definitions in your cluster and verify that image provenance is configured as appropriate."
+  when: rule_5_5_1
+  tags:
+    - level2
+    - rule_5.5.1
+    - audit
+    - master
+
+
+- name: "SCORED | 5.7.1 | AUDIT | L1 | MASTER | Create administrative boundaries between resources using namespaces"
+  debug:
+    msg:
+      - "Follow the documentation and create namespaces for objects in your deployment as you need them."
+  when: rule_5_7_1
+  tags:
+    - level1
+    - rule_5.7.1
+    - audit
+    - master
+
+#This one accepts an array of key-value pairs...need to write something custom to account for existing values or just set the values
+# in the feature_gates variable
+- name: "SCORED | 5.7.2 | AUDIT | L2 | MASTER | Ensure that the seccomp profile is set to docker/default in your pod definitions"
+  debug:
+    msg:
+      - "Enable `docker/default` seccomp profile in your pod definitions."
+      - "--feature-gates=AllAlpha=true"
+  when: rule_5_7_2
+  tags:
+    - level2
+    - rule_5.7.2
+    - audit
+    - master
+
+
+- name: "SCORED | 5.7.3 | AUDIT | L2 | MASTER | Apply Security Context to Your Pods and Containers"
+  debug:
+    msg:
+      - "Apply Security Context to Your Pods and Containers"
+      - "Follow the Kubernetes documentation and apply security contexts to your pods. For a suggested list of security contexts, you may refer to the CIS Security Benchmark for Docker Containers."
+      - "Review the pod definitions in your cluster and verify that you have security contexts defined as appropriate."
+  when: rule_5_7_3
+  tags:
+    - level2
+    - rule_5.7.3
+    - audit
+    - master
+
+
+- name: "SCORED | 5.7.4 | AUDIT | L2 | MASTER | The default namespace should not be used"
+  debug:
+    msg:
+      - "Kubernetes provides a default namespace, where objects are placed if no namespace is specified for them. Placing objects in this namespace makes application of RBAC and other controls more difficult."
+      - "Ensure that namespaces are created to allow for appropriate segregation of Kubernetes resources and that all new resources are created in a specific namespace."
+      - "Run this command to list objects in default namespace"
+      - "kubectl get all"
+      - "The only entries there should be system managed resources such as the `kubernetes` service"
+  when: rule_5_7_4
+  tags:
+    - level2
+    - rule_5.7.4
+    - audit
+    - master
+
+

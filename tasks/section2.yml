@@ -1,0 +1,242 @@
+---
+########################################################
+#region etcd pod specification file
+########################################################
+- name: "SCORED | 2.1 | PATCH | L1 | MASTER | Ensure that the --cert-file and --key-file arguments are set as appropriate"
+  block:
+  - name: "SCORED | 2.1 | PATCH | L1 | MASTER | If argument '--cert-file' argument does not exist, add it"
+    lineinfile:
+      path: "{{ etcd_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --cert-file=).*$'
+      line: '    - --cert-file={{ etcd_cert_file }}'
+      insertafter: '^\s+- etcd$'
+      backup: yes
+  - name: "SCORED | 2.1 | PATCH | L1 | MASTER | Ensure that the --cert-file argument is set as appropriate"
+    lineinfile:
+      path: "{{ etcd_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --cert-file=)(?!{{ etcd_cert_file }}).*$'
+      line: '    - --cert-file={{ etcd_cert_file }}'
+      insertafter: '^\s+- etcd$'
+      backrefs: true
+      backup: yes
+  - name: "SCORED | 2.1 | PATCH | L1 | MASTER | If argument '--key-file' argument does not exist, add it"
+    lineinfile:
+      path: "{{ etcd_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --key-file=).*$'
+      line: '    - --key-file={{ etcd_key_file }}'
+      insertafter: '^\s+- etcd$'
+      backup: yes
+  - name: "SCORED | 2.1 | PATCH | L1 | MASTER | Ensure that the --key-file argument is set as appropriate"
+    lineinfile:
+      path: "{{ etcd_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --key-file=)(?!{{ etcd_key_file }}).*$'
+      line: '    - --key-file={{ etcd_key_file }}'
+      insertafter: '^\s+- etcd$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_2_1
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_2.1
+    - master
+
+
+- name: "SCORED | 2.2 | PATCH | L1 | MASTER | Ensure that the --client-cert-auth argument is set to true"
+  block:
+  - name: "SCORED | 2.2 | PATCH | L1 | MASTER | If argument '--client-cert-auth' argument does not exist, add it"
+    lineinfile:
+      path: "{{ etcd_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --client-cert-auth=).*$'
+      line: '    - --client-cert-auth={{ client_cert_auth }}'
+      insertafter: '^\s+- etcd$'
+      backup: yes
+  - name: "SCORED | 2.2 | PATCH | L1 | MASTER | Ensure that the --client-cert-auth argument is set to true"
+    lineinfile:
+      path: "{{ etcd_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --client-cert-auth=)(?!{{ client_cert_auth }}).*$'
+      line: '    - --client-cert-auth={{ client_cert_auth }}'
+      insertafter: '^\s+- etcd$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_2_2
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_2.2
+    - master
+
+
+- name: "SCORED | 2.3 | PATCH | L1 | MASTER | Ensure that the --auto-tls argument is not set to true"
+  block:
+  - name: "SCORED | 2.3 | PATCH | L1 | MASTER | If argument '--auto-tls' argument does not exist, add it"
+    lineinfile:
+      path: "{{ etcd_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --auto-tls=).*$'
+      line: '    - --auto-tls={{ auto_tls }}'
+      insertafter: '^\s+- etcd$'
+      backup: yes
+  - name: "SCORED | 2.3 | PATCH | L1 | MASTER | Ensure that the --auto-tls argument is not set to true"
+    lineinfile:
+      path: "{{ etcd_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --auto-tls=)(?!{{ auto_tls }}).*$'
+      line: '    - --auto-tls={{ auto_tls }}'
+      insertafter: '^\s+- etcd$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_2_3
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_2.3
+    - master
+
+
+- name: "SCORED | 2.4 | PATCH | L1 | MASTER | Ensure that the --peer-cert-file and --peer-key-file arguments are set as appropriate"
+  block:
+  - name: "SCORED | 2.4 | PATCH | L1 | MASTER | If argument '--peer-cert-file' argument does not exist, add it"
+    lineinfile:
+      path: "{{ etcd_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --peer-cert-file=).*$'
+      line: '    - --peer-cert-file={{ peer_cert_file }}'
+      insertafter: '^\s+- etcd$'
+      backup: yes
+  - name: "SCORED | 2.4 | PATCH | L1 | MASTER | Ensure that the --peer-cert-file argument is set as appropriate"
+    lineinfile:
+      path: "{{ etcd_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --peer-cert-file=)(?!{{ peer_cert_file }}).*$'
+      line: '    - --peer-cert-file={{ peer_cert_file }}'
+      insertafter: '^\s+- etcd$'
+      backrefs: true
+      backup: yes
+  - name: "SCORED | 2.4 | PATCH | L1 | MASTER | If argument '--peer-key-file' argument does not exist, add it"
+    lineinfile:
+      path: "{{ etcd_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --peer-key-file=).*$'
+      line: '    - --peer-key-file={{ peer_key_file }}'
+      insertafter: '^\s+- etcd$'
+      backup: yes
+  - name: "SCORED | 2.4 | PATCH | L1 | MASTER | Ensure that the --peer-key-file argument is set as appropriate"
+    lineinfile:
+      path: "{{ etcd_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --peer-key-file=)(?!{{ peer_key_file }}).*$'
+      line: '    - --peer-key-file={{ peer_key_file }}'
+      insertafter: '^\s+- etcd$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_2_4
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_2.4
+    - master
+
+
+- name: "SCORED | 2.5 | PATCH | L1 | MASTER | Ensure that the --peer-client-cert-auth argument is set to true"
+  block:
+  - name: "SCORED | 2.5 | PATCH | L1 | MASTER | If argument '--peer-client-cert-auth' argument does not exist, add it"
+    lineinfile:
+      path: "{{ etcd_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --peer-client-cert-auth=).*$'
+      line: '    - --peer-client-cert-auth={{ peer_client_cert_auth }}'
+      insertafter: '^\s+- etcd$'
+      backup: yes
+  - name: "SCORED | 2.5 | PATCH | L1 | MASTER | Ensure that the --peer-client-cert-auth argument is set to true"
+    lineinfile:
+      path: "{{ etcd_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --peer-client-cert-auth=)(?!{{ peer_client_cert_auth }}).*$'
+      line: '    - --peer-client-cert-auth={{ peer_client_cert_auth }}'
+      insertafter: '^\s+- etcd$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_2_5
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_2.5
+    - master
+
+
+- name: "SCORED | 2.6 | PATCH | L1 | MASTER | Ensure that the --peer-auto-tls argument is not set to true"
+  block:
+  - name: "SCORED | 2.6 | PATCH | L1 | MASTER | If argument '--peer-auto-tls' argument does not exist, add it"
+    lineinfile:
+      path: "{{ etcd_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --peer-auto-tls=).*$'
+      line: '    - --peer-auto-tls={{ peer_auto_tls }}'
+      insertafter: '^\s+- etcd$'
+      backup: yes
+  - name: "SCORED | 2.6 | PATCH | L1 | MASTER | Ensure that the --peer-auto-tls argument is not set to true"
+    lineinfile:
+      path: "{{ etcd_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --peer-auto-tls=)(?!{{ peer_auto_tls }}).*$'
+      line: '    - --peer-auto-tls={{ peer_auto_tls }}'
+      insertafter: '^\s+- etcd$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_2_6
+  tags:
+    - level1
+    - perms
+    - patch
+    - rule_2.6
+    - master
+
+
+- name: "SCORED | 2.7 | PATCH | L2 | MASTER | Ensure that a unique Certificate Authority is used for etcd"
+  block:
+  - name: "SCORED | 2.7 | PATCH | L2 | MASTER | If argument '--trusted-ca-file' argument does not exist, add it"
+    lineinfile:
+      path: "{{ etcd_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --trusted-ca-file=).*$'
+      line: '    - --trusted-ca-file={{ trusted_ca_file }}'
+      insertafter: '^\s+- etcd$'
+      backup: yes
+  - name: "SCORED | 2.7 | PATCH | L2 | MASTER | Ensure that a unique Certificate Authority is used for etcd"
+    lineinfile:
+      path: "{{ etcd_pod_specification_file }}"
+      state: present
+      regexp: '^(\s+- --trusted-ca-file=)(?!{{ trusted_ca_file }}).*$'
+      line: '    - --trusted-ca-file={{ trusted_ca_file }}'
+      insertafter: '^\s+- etcd$'
+      backrefs: true
+      backup: yes
+  when:
+    - rule_2_7
+  tags:
+    - level2
+    - perms
+    - patch
+    - rule_2.7
+    - master
+########################################################
+#endregion etcd pod specification file
+########################################################
